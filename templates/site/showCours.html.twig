@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+  <article>
+    <h2> {{ cour.title }}</h2>
+    <div class="metadata">  Ecrit le {{cour.createdAt | date('d/m/Y')}} à {{cour.createdAt | date('H:i')}} par</div>
+    <hr>
+    <p> {{cour.content | raw}} </p>
+    <hr>   
+    <p> Listes des exercices (A faire) </p>
+
+    <hr>
+    <a href="{{path('site_edit_cours', {'id' : cour.id})}}" class="btn btn-primary"> Modifier le cours</a>
+  </article>    
+{% endblock %}

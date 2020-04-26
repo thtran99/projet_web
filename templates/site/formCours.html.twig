@@ -1,0 +1,33 @@
+{% extends 'base.html.twig'%}
+
+{% form_theme formCours 'bootstrap_4_layout.html.twig' %}
+
+{% block body%}
+
+  {% if editMode %}
+    <h1> Modification du cours </h1>
+  {% else %}
+    <h1> Création d'un cours </h1>
+  {% endif %}
+
+  {{ form_start(formCours)}}
+
+  {{ form_row(formCours.title, {'attr' : {'placeholder' : 'Titre du cours'}}) }}
+  {{ form_row(formCours.content, {'attr' : {'placeholder' : 'Contenu du cours'}}) }}
+
+
+  <button type="submit" class = "btn btn-success"> 
+  {% if editMode %}
+    Enregistrer les modifications
+  {% else %}
+    Créer le cours
+  {% endif %}
+  </button>
+
+  {{ form_end(formCours) }}
+
+
+
+
+
+{% endblock %}
