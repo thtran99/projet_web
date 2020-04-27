@@ -1,0 +1,26 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+
+ <article>
+    <h2> {{ exercise.title }}</h2>
+
+    <hr>
+
+    <h3><ins>Enoncé : </ins></h3>
+
+    <p> {{exercise.description}} </p>
+
+    <hr>   
+
+    <p> {{exercise.content}} </p>
+
+
+     <a href="{{path('site_show_cours', {'id' : exercise.cours.id})}}" class = "btn btn-primary"> Retour</a>
+    
+       {#   <a href="{{path('site_edit_cours', {'id' : cour.id})}}" class="btn btn-primary"> Modifier l'exercice</a>
+    <hr>  #}
+
+  </article>    
+
+{% endblock %}

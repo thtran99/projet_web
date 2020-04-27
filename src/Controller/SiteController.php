@@ -9,7 +9,9 @@ use Doctrine\ORM\EntityManagerInterface;
 
 use App\Repository\CoursRepository;
 use App\Entity\Cours;
+use App\Entity\Exercise;
 use App\Form\CoursType;
+use App\Repository\ExerciseRepository;
 
 class SiteController extends AbstractController
 {
@@ -32,7 +34,6 @@ class SiteController extends AbstractController
             "cours" => $cours
         ]);
     }
-
 
     /**
      * @Route("/cours/{id}", name="site_show_cours", 
@@ -75,6 +76,20 @@ class SiteController extends AbstractController
         return $this->render("site/formCours.html.twig", [
             'formCours' => $form->createView(),
             'editMode' => $cours->getId() !== null
+        ]);
+    }
+
+
+    /**
+     * @Route("cours/{id1}/exercice/{id2}", name="site_show_exercises")
+     */
+    public function index_exo($id1, $id2, ExerciseRepository $repo) 
+    {
+
+        $exercise = $repo->find($id2);
+
+        return $this->render('site/showExercise.html.twig', [
+            "exercise" => $exercise
         ]);
     }
     

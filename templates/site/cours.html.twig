@@ -7,9 +7,8 @@
     
         {% for cour in cours %}
         <article>
-            <h2> {{cour.title}} </h2>
+            <h3> <a href="{{path('site_show_cours', {'id' : cour.id})}}"> {{cour.title}}</a> </h3>
             <div class="metadata"> Ecrit le {{cour.createdAt | date('d/m/Y')}} à {{cour.createdAt | date('H:i')}} par </div>
-            <a href="{{path('site_show_cours', {'id' : cour.id})}}" class="btn btn-primary"> Acceder au cours </a>
             <hr>
         {% endfor %}
         </article>
