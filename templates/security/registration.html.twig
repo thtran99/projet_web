@@ -6,6 +6,7 @@
   <h1>Inscription</h1>
 
   {{ form_start(form) }}
+  {{ form_row(form.roles, {'label':'Statut'})}}
   {{ form_row(form.email, ({'label':'Email','attr' : {'placeholder': 'Adresse email...'}}) ) }}
   {{form_row(form.username,{'label':'Nom d\'utilisateur','attr':{'placeholder':'Nom d\'utilisateur...'}})}}
   {{form_row(form.password,{'label':'Mot de passe','attr':{'placeholder':'Mot de passe...'}})}}
