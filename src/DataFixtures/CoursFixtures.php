@@ -31,6 +31,7 @@ class CoursFixtures extends Fixture
 
                 $manager->persist($exercice);
             }
+            var_dump($cours);
         }
 
         $manager->flush();

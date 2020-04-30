@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * @Route("/editor", name = "editor_")
@@ -33,6 +34,10 @@ class EditorController extends AbstractController
             if(!$cours->getID()) {
                 $cours->setCreatedAt(new \DateTime());
             }
+
+            $user = $this->getUser();
+
+            $user->addLesson($cours);
 
             $manager->persist($cours);
             $manager->flush();

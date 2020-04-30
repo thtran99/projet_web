@@ -2,5 +2,24 @@
 
 
 {% block body %}
-  <h1> Bienvenue {{app.user.username}} sur le projet de progrommation Web en tant qu'étudiant ! </h1>
+
+  <h1> Bienvenue {{app.user.username}} sur le projet de progrommation Web ! </h1>
+
+  <hr> 
+
+  {% for cour in app.user.lessons %}
+
+    <section class="cours">
+
+        <article>
+            <h3> <a href="{{path('profile_show_cours', {'id' : cour.id})}}"> {{cour.title}}</a> </h3>
+            <div class="metadata"> Ecrit le {{cour.createdAt | date('d/m/Y')}} à {{cour.createdAt | date('H:i')}} par </div>
+
+            <hr>
+        </article>
+
+    </section>  
+
+  {% endfor %}
+
 {% endblock %}
