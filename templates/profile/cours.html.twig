@@ -8,7 +8,7 @@
         {% for cour in cours %}
         <article>
             <h3> <a href="{{path('profile_show_cours', {'id' : cour.id})}}"> {{cour.title}}</a> </h3>
-            <div class="metadata"> Ecrit le {{cour.createdAt | date('d/m/Y')}} à {{cour.createdAt | date('H:i')}} par </div>
+            <div class="metadata"> Ecrit le {{cour.createdAt | date('d/m/Y')}} à {{cour.createdAt | date('H:i')}} par {{cour.createdBy}}</div>
             <hr>
         {% endfor %}
         </article>

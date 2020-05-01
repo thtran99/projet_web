@@ -10,8 +10,8 @@ use App\Entity\Cours;
 use App\Repository\ExerciseRepository;
 
 /**
-     * @Route("/profile", name="profile_")
-     */
+ * @Route("/profile", name="profile_")
+ */
 class ProfileController extends AbstractController
 {
     /**

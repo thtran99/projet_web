@@ -32,7 +32,11 @@ class EditorController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             if(!$cours->getID()) {
+
+                $user = $this->getUser();
+
                 $cours->setCreatedAt(new \DateTime());
+                $cours->setCreatedBy($user->getUsername());
             }
 
             $user = $this->getUser();

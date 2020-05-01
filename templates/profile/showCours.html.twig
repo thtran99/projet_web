@@ -4,7 +4,7 @@
 {% block body %}
   <article>
     <h2> {{ cour.title }}</h2>
-    <div class="metadata">  Ecrit le {{cour.createdAt | date('d/m/Y')}} à {{cour.createdAt | date('H:i')}} par</div>
+    <div class="metadata">  Ecrit le {{cour.createdAt | date('d/m/Y')}} à {{cour.createdAt | date('H:i')}} par {{cour.createdBy}}</div>
     <hr>
 
     <p> {{cour.content | raw}} </p>

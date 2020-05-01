@@ -46,6 +46,11 @@ class Cours
     private $createdAt;
 
     /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $createdBy;
+
+    /**
      * @ORM\OneToMany(targetEntity="App\Entity\Exercise", mappedBy="cours", orphanRemoval=true)
      */
     private $exercises;
@@ -98,6 +103,18 @@ class Cours
     public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getCreatedBy(): string
+    {
+        return $this->createdBy;
+    }
+
+    public function setCreatedBy(string $createdBy): self
+    {
+        $this->createdBy = $createdBy;
 
         return $this;
     }
