@@ -3,7 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Cours;
+use App\Entity\Exercise;
 use App\Form\CoursType;
+use App\Form\ExerciseType;
+use App\Repository\CoursRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -56,10 +59,35 @@ class EditorController extends AbstractController
 
     /**
      * @Route("/cours/{id1}/exercice/new", name="create_exercise")
-     * @Route("/cours/{id1}/exercice/{id2}/edit", name="edit_exercise")
      */
-    public function form_exercise()
+    public function form_exercise($id1,  Exercise $exercise = null, Request $request, EntityManagerInterface $manager, CoursRepository $repo_cours)
     {
-        #TODO
+
+        $cours = $repo_cours->find($id1);
+
+        if (!$exercise) {
+            $exercise = new Exercise();
+        }
+
+        $form = $this->createForm(ExerciseType::class, $exercise);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $cours->addExercise($exercise);
+            $exercise->setCours($id1);
+
+            $manager->persist($exercise);
+            $manager->flush();
+
+            return $this->redirectToRoute('profile_show_cours', [
+                'id' => $cours->getId()
+            ]);
+        }
+
+        return $this->render("editor/formExercise.html.twig", [
+            'form' => $form->createView(),
+            'editMode' => $exercise->getId() !== null
+        ]);
     }
 }

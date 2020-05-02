@@ -1,0 +1,93 @@
+{% extends 'base.html.twig'%}
+
+{% form_theme form 'bootstrap_4_layout.html.twig' %}
+
+
+{% block title %}
+	{% if editMode %}
+		Modification de l'exercice
+	{% else %}
+		Création d'un exercice
+	{% endif %}
+{% endblock %}
+
+{% block body%}
+
+{% if editMode %}
+	<h1>
+		Modification de l'exercice
+	</h1>
+{% else %}
+	<h1>
+		Création d'un exercice
+	</h1>
+{% endif %}
+
+{{ form_start(form)}}
+
+{{ form_row(form.title, {'attr' : {'label':'Titre', 'placeholder' : 'Titre du cours'}}) }}
+
+{{ form_row(form.description, {'attr' : {'label':'Description', 'placeholder' : 'Description de l\'exercice'}}) }}
+
+
+  <h1>Liste des Lignes</h1>
+  <table id="lines" class="table table-striped">
+    <thead>
+      <tr>
+        <th>Contenue</th>
+        <th>Rang</th>
+        <th>Identation</th>
+      </tr>
+    </thead>
+
+  {#   <tbody>
+    {% for line in lignes %}
+      <tr>
+        <td>{{ line.content }}</td>
+        <td>{{ line.ranking }}</td>
+        <td>{{ line.indentation }}</td>
+      </tr>
+    {% endfor %}
+    </tbody> #}
+  </table>
+
+
+    <hr>
+
+
+  <nav class="navbar navbar-expand-lg ">
+
+    <div class="collapse navbar-collapse" id="navbarColor04">
+
+      <ul class="navbar-nav mr-auto">
+
+        <li class="nav-item">
+          <a class="btn btn-info" href="#ajouteruneligne#">Ajouter une ligne</a>
+        </li>
+
+      </ul>
+
+      <ul class="navbar-nav ml-auto">
+
+      <li class="nav-item">
+      
+        <button type="submit" class="btn btn-success">
+          {% if editMode %}
+            Enregistrer les modifications
+          {% else %}
+            Créer le cours
+          {% endif %}
+        </button>
+
+        </li>
+
+      </ul>
+
+    </div>
+
+  </nav>
+
+	{{ form_end(form) }}
+
+
+{% endblock %}

@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -27,15 +29,20 @@ class Exercise
     private $description;
 
     /**
-     * @ORM\Column(type="text")
-     */
-    private $content;
-
-    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Cours", inversedBy="exercises")
      * @ORM\JoinColumn(nullable=false)
      */
     private $cours;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Line", mappedBy="exercise_id", orphanRemoval=true)
+     */
+    private $lignes;
+
+    public function __construct()
+    {
+        $this->lignes = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -86,6 +93,37 @@ class Exercise
     public function setCours(?Cours $cours): self
     {
         $this->cours = $cours;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Line[]
+     */
+    public function getLignes(): Collection
+    {
+        return $this->lignes;
+    }
+
+    public function addLigne(Line $ligne): self
+    {
+        if (!$this->lignes->contains($ligne)) {
+            $this->lignes[] = $ligne;
+            $ligne->setExerciseId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLigne(Line $ligne): self
+    {
+        if ($this->lignes->contains($ligne)) {
+            $this->lignes->removeElement($ligne);
+            // set the owning side to null (unless already changed)
+            if ($ligne->getExerciseId() === $this) {
+                $ligne->setExerciseId(null);
+            }
+        }
 
         return $this;
     }
