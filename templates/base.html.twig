@@ -1,15 +1,31 @@
 <!DOCTYPE html>
 <html>
+
+    {% if app.user %}
+        {% if is_granted('ROLE_EDITOR') %}
+            {% set titre = "ZOOM TEACH" %}
+        {% else %}
+            {% set titre = "ZOOM LEARN" %}
+        {% endif %}
+    {% else %}
+        {% set titre = "ZOOM ZOOM" %}
+    {% endif %}
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}ZOOM LEARN{% endblock %}</title>
+        <title>
+        
+        {% block title %}
+            {{ titre }}
+       {% endblock %}</title>
+
         <link rel="stylesheet" type="text/css" href="https://bootswatch.com/4/lux/bootstrap.min.css">
         {% block stylesheets %}{% endblock %}
     </head>
+
     <body>
 
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <a class="navbar-brand" href="{{path('profile_home')}}">ZOOM LEARN</a>
+            <a class="navbar-brand" href="{{path('profile_home')}}"> {{ titre }}</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -56,4 +72,5 @@
     </div>
         {% block javascripts %}{% endblock %}
     </body>
+
 </html>

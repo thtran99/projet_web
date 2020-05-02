@@ -20,7 +20,7 @@ class EditorController extends AbstractController
      * @Route("/cours/{id}/edit", name="edit_cours",
      *  requirements= {"id" = "\d+"})
      */
-    public function form_cours(Cours $cours = null,Request $request, EntityManagerInterface $manager) 
+    public function form_cours(Cours $cours = null, Request $request, EntityManagerInterface $manager)
     {
         if (!$cours) {
             $cours = new Cours();
@@ -32,20 +32,21 @@ class EditorController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $user = $this->getUser();
-            if(!$cours->getID()) {
-                
+            if (!$cours->getID()) {
+
                 $cours->setCreatedAt(new \DateTime());
                 $cours->setCreatedBy($user->getUsername());
             }
-            
+
             $user->addLesson($cours);
-            
+
             $manager->persist($cours);
             $manager->flush();
 
             return $this->redirectToRoute('profile_show_cours', [
-                'id' => $cours->getId()]);
-            }
+                'id' => $cours->getId()
+            ]);
+        }
 
         return $this->render("editor/formCours.html.twig", [
             'formCours' => $form->createView(),
@@ -53,4 +54,12 @@ class EditorController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/cours/{id1}/exercice/new", name="create_exercise")
+     * @Route("/cours/{id1}/exercice/{id2}/edit", name="edit_exercise")
+     */
+    public function form_exercise()
+    {
+        #TODO
+    }
 }
