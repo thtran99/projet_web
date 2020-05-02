@@ -17,7 +17,7 @@ use Doctrine\ORM\EntityManagerInterface;
 class ProfileController extends AbstractController
 {
     /**
-     * @Route("/",name="home")
+     * @Route("/", name="home")
      */
     public function home()
     {
@@ -67,7 +67,7 @@ class ProfileController extends AbstractController
      */
     public function registerLesson(Cours $cour , EntityManagerInterface $manager) {
 
-        if (!$this->isGranted('ROLE_ADMIN')) {
+        if (!$this->isGranted('ROLE_EDITOR')) {
         
         $user = $this->getUser(); 
 
@@ -78,6 +78,8 @@ class ProfileController extends AbstractController
         return $this->redirectToRoute("profile_home");
 
         }
+
+        return $this->redirectToRoute("profile_home");
     }
 
 
@@ -87,7 +89,7 @@ class ProfileController extends AbstractController
      */
     public function unregisterLesson(Cours $cour , EntityManagerInterface $manager) {
 
-        if (!$this->isGranted('ROLE_ADMIN')) {
+        if (!$this->isGranted('ROLE_EDITOR')) {
             
             $user = $this->getUser(); 
     
@@ -97,6 +99,8 @@ class ProfileController extends AbstractController
             
             return $this->redirectToRoute("profile_home");
         }
+
+        return $this->redirectToRoute("profile_home");
     }
     
 }

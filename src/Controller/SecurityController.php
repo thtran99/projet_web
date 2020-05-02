@@ -14,6 +14,14 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class SecurityController extends AbstractController
 {
     /**
+     * @Route("/", name ="home")
+     */
+    public function home()
+    {
+       return $this->redirectToRoute("profile_home");
+    }
+    
+    /**
      * @Route("/inscription", name="security_registration")
      */
     public function registration(Request $request, EntityManagerInterface $manager, UserPasswordEncoderInterface $encoder)
