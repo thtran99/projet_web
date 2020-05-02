@@ -1,5 +1,6 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Cours{% endblock %}
 
 {% block body %}
   <article>
@@ -10,7 +11,7 @@
     <p> {{cour.content | raw}} </p>
     <hr>   
 
-    {% if 'ROLE_EDITOR' in app.user.roles %}
+    {% if is_granted('ROLE_EDITOR') and app.user in cour.users %}
       <a href="{{path('editor_edit_cours', {'id' : cour.id})}}" class="btn btn-primary"> Modifier le cours</a>
       <hr>
     {% endif %}
@@ -24,13 +25,57 @@
   </article>    
 
   <section class="list-group">
-    {% for exercise in cour.exercises %}
+    {% for exercise in cour.exercises  %}
         <a href="{{path('profile_show_exercises', {'id1' : cour.id, 'id2' : exercise.id})}}"  class="list-group-item list-group-item-action">{{exercise.title}}</a>
     {% endfor %}
   </section>
 
-  {% if 'ROLE_EDITOR' in app.user.roles %}
+  {% if is_granted('ROLE_EDITOR') and app.user in cour.users %}
     <hr>
     <a href="/cours/#/#" class="btn btn-primary"> Ajouter un exercice </a>
   {% endif %}
+
+
+  <hr>
+
+ <nav class="navbar navbar-expand-lg ">
+  
+            <div class="collapse navbar-collapse" id="navbarColor03">
+
+                 <ul class="navbar-nav mr-auto">
+
+                  <li class="nav-item">
+                      <a href="{{path('profile_cours')}}" class = "btn btn-primary">Retour</a>
+                  </li>
+                
+                </ul>
+
+                <ul class="navbar-nav ml-auto">
+
+                {% if is_granted('ROLE_EDITOR')%}
+
+                {% else %}
+                  
+                  {% if app.user in cour.users %}
+
+                    <li class="nav-item">
+                        <a class="btn btn-danger" href="{{path('profile_unregisterLesson', {'id' : cour.id} )}}">Se désinscrire</a>
+                    </li>
+
+                  {% else %}
+
+                    <li class="nav-item">
+                        <a class="btn btn-success" href="{{path('profile_registerLesson', {'id' : cour.id} )}}">S'inscrire</a>
+                    </li>
+
+                  {% endif %}
+
+                {% endif %}
+
+                </ul>
+                
+            </div>
+
+        </nav>
+
 {% endblock %}

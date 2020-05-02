@@ -4,10 +4,12 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 
 use App\Repository\CoursRepository;
 use App\Entity\Cours;
 use App\Repository\ExerciseRepository;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * @Route("/profile", name="profile_")
@@ -56,6 +58,45 @@ class ProfileController extends AbstractController
         return $this->render('profile/showExercise.html.twig', [
             "exercise" => $exercise
         ]);
+    }
+
+    
+    /**
+     * @Route("/cours/{id}/inscription", name="registerLesson",
+     * requirements= {"id" = "\d+"})
+     */
+    public function registerLesson(Cours $cour , EntityManagerInterface $manager) {
+
+        if (!$this->isGranted('ROLE_ADMIN')) {
+        
+        $user = $this->getUser(); 
+
+        $user->addLesson($cour);
+
+        $manager->flush();
+       
+        return $this->redirectToRoute("profile_home");
+
+        }
+    }
+
+
+     /**
+     * @Route("/cours/{id}/desinscription", name="unregisterLesson",
+     * requirements= {"id" = "\d+"})
+     */
+    public function unregisterLesson(Cours $cour , EntityManagerInterface $manager) {
+
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            
+            $user = $this->getUser(); 
+    
+            $user->removeLesson($cour);
+            
+            $manager->flush();
+            
+            return $this->redirectToRoute("profile_home");
+        }
     }
     
 }

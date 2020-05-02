@@ -2,6 +2,14 @@
 
 {% form_theme formCours 'bootstrap_4_layout.html.twig' %}
 
+{% block title %}
+  {% if editMode %}
+    Modification du cours
+  {% else %}
+    Création d'un cours 
+  {% endif %}
+{% endblock %}
+
 {% block body%}
 
   {% if editMode %}

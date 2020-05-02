@@ -2,14 +2,14 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <title>{% block title %}ZOOM LEARN{% endblock %}</title>
         <link rel="stylesheet" type="text/css" href="https://bootswatch.com/4/lux/bootstrap.min.css">
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
 
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <a class="navbar-brand" href="{{path('profile_home')}}">Home</a>
+            <a class="navbar-brand" href="{{path('profile_home')}}">ZOOM LEARN</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -31,7 +31,7 @@
                             </li>
                     {% endif %}
 
-                    {%  if app.user and 'ROLE_EDITOR' in app.user.roles %}
+                    {%  if is_granted('ROLE_EDITOR') %}
                             <li class="nav-item">
                                 <a class="nav-link" href="{{path('editor_create_cours')}}">Créer un cours</a>
                             </li>
@@ -43,7 +43,7 @@
                         <ul class="navbar-nav ml-auto">
 
                             <li class="nav-item">
-                                <a class="nav-link " href="{{path('security_logout')}}">Deconnexion</a>
+                                <a class="nav-link " href="{{path('security_logout')}}">Deconnexion ({{app.user.username}})</a>
                             </li>
                         </ul>
                     {% endif %}
