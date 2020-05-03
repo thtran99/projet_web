@@ -1,0 +1,64 @@
+{% extends "base.html.twig" %}
+
+
+{% block title %}Exercice
+{% endblock %}
+
+{% block body %}
+
+	<article>
+		<h2>{{ exercise.title }}</h2>
+
+		<div class="group"></div>
+
+		<h3>
+			<ins>Enoncé :
+			</ins>
+		</h3>
+
+		<p>
+			{{exercise.description}}
+		</p>
+
+		<hr>
+
+
+		<table id="lines" class="table table-striped">
+			<thead>
+				<tr>
+					<th>Rang</th>
+					<th>Identation</th>
+					<th>Contenu</th>
+				</tr>
+			</thead>
+
+			{% for line in exercise.lignes %}
+
+				<tbody>
+					<tr>
+						<td>
+							{{ line.ranking }}
+						</td>
+						<td>
+							{{ line.indentation }}
+						</td>
+
+						<td>
+							{{ line.content }}
+						</td>
+					</tr>
+				</tbody>
+
+			{% endfor %}
+
+		</table>
+
+		<hr>
+
+		<a href="{{path('profile_show_cours', {'id' : exercise.cours.id})}}" class="btn btn-primary">
+			Retour</a>
+
+
+	</article>
+
+{% endblock %}

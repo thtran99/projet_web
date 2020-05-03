@@ -49,7 +49,7 @@ class ProfileController extends AbstractController
     /**
      * @Route("/cours/{id1}/exercice/{id2}", name="show_exercises")
      */
-    public function index_exo($id1, $id2, ExerciseRepository $repo)
+    public function show_exo($id1, $id2, ExerciseRepository $repo)
     {
 
         $exercise = $repo->find($id2);

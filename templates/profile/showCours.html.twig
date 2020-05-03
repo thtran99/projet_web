@@ -34,8 +34,16 @@
 	</article>
 
 	<section class="list-group">
+
+		{% if is_granted('ROLE_EDITOR') %}
+			{% set route = "editor" %}
+		{% else %}
+			{% set route = "profile"%}
+		{% endif %}
+
 		{% for exercise in cour.exercises  %}
-			<a href="{{path('profile_show_exercises', {'id1' : cour.id, 'id2' : exercise.id})}}" class="list-group-item list-group-item-action">{{exercise.title}}</a>
+
+			<a href="{{path(route ~'_show_exercises', {'id1' : cour.id, 'id2' : exercise.id})}}" class=" list-group-item list-group-item-action">{{exercise.title}}</a>
 		{% endfor %}
 	</section>
 

@@ -1,27 +1,38 @@
 {% extends "base.html.twig" %}
 
 
-{% block title %}Exercice{% endblock %}
+{% block title %}Exercice
+{% endblock %}
 
 {% block body %}
 
- <article>
-    <h2> {{ exercise.title }}</h2>
+	<article>
+		<h2>
+			{{ exercise.title }}</h2>
 
-    <hr>
+		<div class="group"></div>
 
-    <h3><ins>Enoncé : </ins></h3>
+		<h3>
+			<ins>Enoncé :
+			</ins>
+		</h3>
 
-    <p> {{exercise.description}} </p>
+		<p>
+			{{exercise.description}}
+		</p>
 
-    <hr>   
+		<hr>
 
-    <p> {{exercise.content}} </p>
+		<p>
+			{{exercise.content}}
+		</p>
+		{#  A FAIRE POUR LES ETUDIANTS #}
 
 
-    <a href="{{path('profile_show_cours', {'id' : exercise.cours.id})}}" class = "btn btn-primary"> Retour</a>
-  
+		<a href="{{path('profile_show_cours', {'id' : exercise.cours.id})}}" class="btn btn-primary">
+			Retour</a>
 
-  </article>    
+
+	</article>
 
 {% endblock %}

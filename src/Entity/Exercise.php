@@ -39,6 +39,9 @@ class Exercise
      */
     private $lignes;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
     private $nbLines;
 
     public function __construct()

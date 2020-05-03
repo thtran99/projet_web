@@ -29,13 +29,23 @@
 	{{ form_row(formCours.content, {'label':'Contenu', 'attr' : { 'placeholder' : 'Contenu du cours'}}) }}
 
 
-	<button type="submit" class="btn btn-success">
-		{% if editMode %}
-			Enregistrer les modifications
-		{% else %}
-			Créer le cours
-		{% endif %}
-	</button>
+	<nav class="navbar navbar-expand-lg ">
+		<div class="collapse navbar-collapse" id="navbarColor04">
+			<ul class="navbar-nav ml-auto">
+				<li class="nav-item">
+
+					<button type="submit" class="btn btn-success">
+						{% if editMode %}
+							Enregistrer les modifications
+						{% else %}
+							Créer le cours
+						{% endif %}
+					</button>
+
+				</li>
+			</ul>
+		</div>
+	</nav>
 
 	{{ form_end(formCours) }}
 

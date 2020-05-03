@@ -5,8 +5,11 @@ namespace App\Controller;
 use App\Entity\Cours;
 use App\Entity\Exercise;
 use App\Entity\Line;
+use App\Entity\LinesTask;
 use App\Form\CoursType;
 use App\Form\ExerciseType;
+use App\Form\LinesTaskType;
+use App\Form\LineType;
 use App\Repository\CoursRepository;
 use App\Repository\ExerciseRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -98,18 +101,51 @@ class EditorController extends AbstractController
     /**
      * @Route("/cours/{id1}/exercice/{id2}/newLines", name="create_exercise_lines")
      */
-    public function form_exercise_lines($id2, ExerciseRepository $repo)
+    public function form_exercise_lines($id1, $id2,  Request $request, EntityManagerInterface $manager, ExerciseRepository $repo)
     {
         $exercise = $repo->find($id2);
 
-        $lines = [];
+        $task = new LinesTask();
 
         for ($i = 0; $i < $exercise->getnbLines(); $i++) {
-            $lines[$i] = new Line();
+            $line = new Line();
+            $line->setRanking($i);
+            $task->getLines()->add($line);
         }
 
-        return $this->render("editor/formLines.html.twig", [
-            'lines' => $lines
+        $form = $this->createForm(LinesTaskType::class, $task);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            for ($i = 0; $i < $exercise->getnbLines(); $i++) {
+                $line = $task->getLines()->get($i);
+                $exercise->addLigne($line);
+                $line->setExerciseId($exercise);
+                $manager->persist($line);
+            }
+            $manager->flush();
+
+            return $this->redirectToRoute('editor_show_exercises', [
+                'id1' => $id1,
+                'id2' => $id2
+            ]);
+        }
+
+        return $this->render('editor/formLines.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/cours{id1}/exercice/{id2}", name="show_exercises")
+     */
+    public function show_exo($id2, ExerciseRepository $repo)
+    {
+        $exercise = $repo->find($id2);
+
+        return $this->render('editor/showExercise.html.twig', [
+            "exercise" => $exercise
         ]);
     }
 }
