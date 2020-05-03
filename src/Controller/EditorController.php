@@ -4,12 +4,15 @@ namespace App\Controller;
 
 use App\Entity\Cours;
 use App\Entity\Exercise;
+use App\Entity\Line;
 use App\Form\CoursType;
 use App\Form\ExerciseType;
 use App\Repository\CoursRepository;
+use App\Repository\ExerciseRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Test\FormInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
 
@@ -75,19 +78,38 @@ class EditorController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $cours->addExercise($exercise);
-            $exercise->setCours($id1);
+            $exercise->setCours($cours);
 
             $manager->persist($exercise);
             $manager->flush();
 
-            return $this->redirectToRoute('profile_show_cours', [
-                'id' => $cours->getId()
+            return $this->redirectToRoute('editor_create_exercise_lines', [
+                'id1' => $cours->getId(),
+                'id2' => $exercise->getId()
             ]);
         }
 
         return $this->render("editor/formExercise.html.twig", [
             'form' => $form->createView(),
             'editMode' => $exercise->getId() !== null
+        ]);
+    }
+
+    /**
+     * @Route("/cours/{id1}/exercice/{id2}/newLines", name="create_exercise_lines")
+     */
+    public function form_exercise_lines($id2, ExerciseRepository $repo)
+    {
+        $exercise = $repo->find($id2);
+
+        $lines = [];
+
+        for ($i = 0; $i < $exercise->getnbLines(); $i++) {
+            $lines[$i] = new Line();
+        }
+
+        return $this->render("editor/formLines.html.twig", [
+            'lines' => $lines
         ]);
     }
 }

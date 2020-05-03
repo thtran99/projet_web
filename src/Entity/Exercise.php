@@ -39,6 +39,8 @@ class Exercise
      */
     private $lignes;
 
+    private $nbLines;
+
     public function __construct()
     {
         $this->lignes = new ArrayCollection();
@@ -124,6 +126,18 @@ class Exercise
                 $ligne->setExerciseId(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getnbLines(): ?int
+    {
+        return $this->nbLines;
+    }
+
+    public function setnbLines(int $nbLines): self
+    {
+        $this->nbLines = $nbLines;
 
         return $this;
     }

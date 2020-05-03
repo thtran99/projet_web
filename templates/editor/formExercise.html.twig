@@ -25,69 +25,27 @@
 
 {{ form_start(form)}}
 
-{{ form_row(form.title, {'attr' : {'label':'Titre', 'placeholder' : 'Titre du cours'}}) }}
+{{ form_row(form.title, {'label':'Titre', 'attr' : {'placeholder' : 'Titre du cours'}}) }}
 
-{{ form_row(form.description, {'attr' : {'label':'Description', 'placeholder' : 'Description de l\'exercice'}}) }}
+{{ form_row(form.description, {'label':'Description', 'attr' : { 'placeholder' : 'Description de l\'exercice'}}) }}
 
-
-  <h1>Liste des Lignes</h1>
-  <table id="lines" class="table table-striped">
-    <thead>
-      <tr>
-        <th>Contenue</th>
-        <th>Rang</th>
-        <th>Identation</th>
-      </tr>
-    </thead>
-
-  {#   <tbody>
-    {% for line in lignes %}
-      <tr>
-        <td>{{ line.content }}</td>
-        <td>{{ line.ranking }}</td>
-        <td>{{ line.indentation }}</td>
-      </tr>
-    {% endfor %}
-    </tbody> #}
-  </table>
-
-
-    <hr>
-
+  {{ form_row(form.nbLines, {'label':'Nombre de lignes', 'attr' : { 'placeholder' : 'Nombre entre 1 et 100'}}) }}
 
   <nav class="navbar navbar-expand-lg ">
-
     <div class="collapse navbar-collapse" id="navbarColor04">
-
-      <ul class="navbar-nav mr-auto">
-
-        <li class="nav-item">
-          <a class="btn btn-info" href="#ajouteruneligne#">Ajouter une ligne</a>
-        </li>
-
-      </ul>
-
       <ul class="navbar-nav ml-auto">
-
-      <li class="nav-item">
-      
-        <button type="submit" class="btn btn-success">
-          {% if editMode %}
-            Enregistrer les modifications
-          {% else %}
-            Créer le cours
-          {% endif %}
-        </button>
+        <li class="nav-item">
+        
+          <button type="submit" class="btn btn-success">
+            Suivant
+          </button>
 
         </li>
-
       </ul>
-
     </div>
-
   </nav>
 
-	{{ form_end(form) }}
+  {{ form_end(form) }}
 
 
 {% endblock %}
