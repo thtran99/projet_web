@@ -134,22 +134,22 @@ class User implements UserInterface
 
     public function getConfirmPassword()
     {
-        return $this -> confirm_password;
+        return $this->confirm_password;
     }
 
     public function setConfirmPassword($confirm_password)
     {
         $this->confirm_password = $confirm_password;
-        
+
         return $this;
     }
 
-    public function getRoles() : array
+    public function getRoles(): array
     {
         $roles = $this->roles;
-           
-        $roles[] = 'ROLE_USER';
-           
+
+        $roles[] = '';
+
         return array_unique($roles);
     }
 
@@ -162,11 +162,9 @@ class User implements UserInterface
 
     public function eraseCredentials()
     {
-        
     }
 
     public function getSalt()
     {
-        
     }
 }

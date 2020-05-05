@@ -17,7 +17,7 @@ class RegistrationType extends AbstractType
             ->add('email')
             ->add('username')
             ->add('password', PasswordType::class)
-            ->add('confirm_password', PasswordType::class) 
+            ->add('confirm_password', PasswordType::class)
             ->add('roles', ChoiceType::class, [
                 'choices' => [
                     'Etudiant' => 'ROLE_USER',
@@ -27,8 +27,7 @@ class RegistrationType extends AbstractType
                 'multiple' => true,
                 'label' => 'Statut',
                 'empty_data' => 'ROLE_USER'
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)
