@@ -20,7 +20,7 @@ class LineType extends AbstractType
                     'html5' => true,
                     'attr' => [
                         'min' => '0',
-                        'max' => '100',
+                        'max' => '99',
                     ]
                 ]
             )

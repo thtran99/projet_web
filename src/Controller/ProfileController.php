@@ -54,8 +54,13 @@ class ProfileController extends AbstractController
 
         $exercise = $repo->find($id2);
 
+        $random_lignes = $exercise->getLignes()->toArray();
+
+        shuffle($random_lignes);
+
         return $this->render('profile/showExercise.html.twig', [
-            "exercise" => $exercise
+            'exercise' => $exercise,
+            'random_lignes' => $random_lignes
         ]);
     }
 
@@ -71,7 +76,7 @@ class ProfileController extends AbstractController
 
             $user = $this->getUser();
 
-            $user->addLesson($cour);
+            $cour->addUser($user);
 
             $manager->flush();
 
@@ -93,7 +98,7 @@ class ProfileController extends AbstractController
 
             $user = $this->getUser();
 
-            $user->removeLesson($cour);
+            $cour->removeUser($user);
 
             $manager->flush();
 

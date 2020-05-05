@@ -21,16 +21,53 @@
 			{{exercise.description}}
 		</p>
 
-		<hr>
+		<table id="lines" class="table table-striped">
+			<thead>
+				<tr>
+					<th>Rang</th>
+					<th>Identation</th>
+					<th>Contenu</th>
+				</tr>
+			</thead>
 
-		<p>
-			{{exercise.content}}
-		</p>
-		{#  A FAIRE POUR LES ETUDIANTS #}
+			{% for line in random_lignes %}
+				{% set rank = line.ranking %}
 
+				<tbody>
+					<tr>
+						<td>
+							<input type="number" name="{{'rank'~ rank}}" id="{'rank'~ rank}}" min="0" max="{{ loop.length - 1}}">
+						</td>
+						<td>
+							<input type="number" name="{{'indentation'~ rank}}" id="{{'indentation'~ rank}}" min="0" max="99">
+						</td>
+						<td>
+							{{ line.content }}
+						</td>
+					</tr>
+				</tbody>
 
-		<a href="{{path('profile_show_cours', {'id' : exercise.cours.id})}}" class="btn btn-primary">
-			Retour</a>
+			{% endfor %}
+
+		</table>
+
+		<nav class="navbar navbar-expand-lg ">
+			<div class="collapse navbar-collapse" id="navbarColor04">
+
+				<ul class="navbar-nav mr-auto">
+					<li class="nav-item">
+						<a href="{{path('profile_show_cours', {'id' : exercise.cours.id})}}" class="btn btn-primary">Retour</a>
+					</li>
+				</ul>
+
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item">
+						<a class="btn btn-success" href="">Valider</a>
+					</li>
+				</ul>
+
+			</div>
+		</nav>
 
 
 	</article>
