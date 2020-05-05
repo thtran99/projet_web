@@ -1,10 +1,19 @@
 {% extends "base.html.twig" %}
 
-{% block title %}Creation exercice
+{% block title %}
+	{% if editMode %}
+		Creation exercice
+	{% else %}
+		Modification exercice
+	{% endif %}
 {% endblock %}
 
 {% block body %}
-	<h1>Creation du contenue de l'exercice</h1>
+	{% if editMode %}
+		<h1>Creation du contenue de l'exercice</h1>
+	{% else %}
+		<h1>Modification du contenue de l'exercice</h1>
+	{% endif %}
 
 
 	<table id="lines" class="table table-striped">
@@ -43,15 +52,25 @@
 
 	<nav class="navbar navbar-expand-lg ">
 		<div class="collapse navbar-collapse" id="navbarColor04">
-			<ul class="navbar-nav ml-auto">
+
+			<ul class="navbar-nav mr-auto">
 				<li class="nav-item">
-
-					<button type="submit" class="btn btn-success">
-						Créer l'exercice
-					</button>
-
+					<a class="btn btn-primary" href="{{path('editor_edit_exercise', {'id1': id1, 'id2': id2}) }}">Retour</a>
 				</li>
 			</ul>
+
+			<ul class="navbar-nav ml-auto">
+				<li class="nav-item">
+					<button type="submit" class="btn btn-success">
+						{% if editMode %}
+							Creer
+						{% else %}
+							Enregistrer les modifications
+						{% endif %}
+					</button>
+				</li>
+			</ul>
+
 		</div>
 	</nav>
 	{{ form_end(form) }}

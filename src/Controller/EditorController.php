@@ -65,13 +65,17 @@ class EditorController extends AbstractController
 
     /**
      * @Route("/cours/{id1}/exercice/new", name="create_exercise")
+     * @Route("/cours/{id1}/exercice/{id2}/edit", name="edit_exercise")
      */
-    public function form_exercise($id1,  Exercise $exercise = null, Request $request, EntityManagerInterface $manager, CoursRepository $repo_cours)
+    public function form_exercise($id1, $id2 = -1, Exercise $exercise = null, Request $request, EntityManagerInterface $manager, CoursRepository $repo_cours, ExerciseRepository $repo_exo)
     {
-
         $cours = $repo_cours->find($id1);
 
-        if (!$exercise) {
+        $editMode = $id2 != -1;
+
+        if ($editMode) {
+            $exercise = $repo_exo->find($id2);
+        } else {
             $exercise = new Exercise();
         }
 
@@ -81,36 +85,69 @@ class EditorController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $cours->addExercise($exercise);
-            $exercise->setCours($cours);
 
             $manager->persist($exercise);
             $manager->flush();
 
             return $this->redirectToRoute('editor_create_exercise_lines', [
                 'id1' => $cours->getId(),
-                'id2' => $exercise->getId()
+                'id2' => $exercise->getId(),
+                'editMode' => $editMode
             ]);
         }
 
         return $this->render("editor/formExercise.html.twig", [
             'form' => $form->createView(),
-            'editMode' => $exercise->getId() !== null
+            'editMode' => $editMode
         ]);
     }
 
     /**
      * @Route("/cours/{id1}/exercice/{id2}/newLines", name="create_exercise_lines")
      */
-    public function form_exercise_lines($id1, $id2,  Request $request, EntityManagerInterface $manager, ExerciseRepository $repo)
+    public function form_exercise_lines($id1, $id2, $editMode = false, Request $request, EntityManagerInterface $manager, ExerciseRepository $repo)
     {
         $exercise = $repo->find($id2);
 
         $task = new LinesTask();
 
-        for ($i = 0; $i < $exercise->getnbLines(); $i++) {
-            $line = new Line();
-            $line->setRanking($i);
-            $task->getLines()->add($line);
+
+        $nbLinesUser =  $exercise->getnbLines();
+        $nbLinesData = $exercise->getLignes()->count();
+        $diff = $nbLinesUser - $nbLinesData;
+
+        if ($diff == $nbLinesUser) {
+            for ($i = 0; $i < $nbLinesUser; $i++) {
+                $line = new Line();
+                $line->setRanking($i);
+                $task->getLines()->add($line);
+            }
+        } elseif ($diff == 0) {
+            for ($i = 0; $i < $nbLinesUser; $i++) {
+                $line = $exercise->getLignes()->get($i);
+                $task->getLines()->add($line);
+            }
+        } elseif ($diff < 0) {
+            for ($i = 0; $i < $nbLinesData; $i++) {
+                if ($i >= ($nbLinesData + $diff)) {
+                    $line = $exercise->getLignes()->get($i);
+                    $exercise->removeLigne($line);
+                } else {
+                    $line = $exercise->getLignes()->get($i);
+                    $task->getLines()->add($line);
+                }
+            }
+        } else {
+            for ($i = 0; $i < $nbLinesUser; $i++) {
+                if ($i < $nbLinesData) {
+                    $line = $exercise->getLignes()->get($i);
+                    $task->getLines()->add($line);
+                } else {
+                    $line = new Line();
+                    $line->setRanking($i);
+                    $task->getLines()->add($line);
+                }
+            }
         }
 
         $form = $this->createForm(LinesTaskType::class, $task);
@@ -121,7 +158,6 @@ class EditorController extends AbstractController
             for ($i = 0; $i < $exercise->getnbLines(); $i++) {
                 $line = $task->getLines()->get($i);
                 $exercise->addLigne($line);
-                $line->setExerciseId($exercise);
                 $manager->persist($line);
             }
             $manager->flush();
@@ -133,19 +169,25 @@ class EditorController extends AbstractController
         }
 
         return $this->render('editor/formLines.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'editMode' => $editMode,
+            'id1' => $id1,
+            'id2' => $id2
         ]);
     }
 
     /**
-     * @Route("/cours{id1}/exercice/{id2}", name="show_exercises")
+     * @Route("/cours/{id1}/exercice/{id2}", name="show_exercises", 
+     *  requirements= {"id1" = "\d+","id2" = "\d+"})
      */
-    public function show_exo($id2, ExerciseRepository $repo)
+    public function show_exo($id1, $id2, ExerciseRepository $repo)
     {
         $exercise = $repo->find($id2);
 
         return $this->render('editor/showExercise.html.twig', [
-            "exercise" => $exercise
+            'exercise' => $exercise,
+            'id1' => $id1,
+            'id2' => $id2
         ]);
     }
 }

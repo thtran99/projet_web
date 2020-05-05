@@ -35,7 +35,7 @@ class Exercise
     private $cours;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Line", mappedBy="exercise_id", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Line", mappedBy="exercise_id", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     private $lignes;
 
