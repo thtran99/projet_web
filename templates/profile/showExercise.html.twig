@@ -21,34 +21,67 @@
 			{{exercise.description}}
 		</p>
 
-		<span style="color: red;" id="erreur"></span>
-		<span style="color: green;" id="correct"></span>
+		<div class="enonce_general">
+			<label>A remettre dans le bonne ordre et la bonne identation</label>
+			<ul>
+				{% for line in random_lignes %}
+					<li>{{ line.content }}</li>
+				{% endfor %}
+			</ul>
+		</div>
+
+		{% if succes %}
+			{# TODO : succes #}
+		{% else %}
+
+			<div class="errors">
+
+				{% if not error_content is empty%}
+					<div class="content">
+						<label>Le contenue de la ligne est incorrect</label>
+						<ul>
+							{% for error in error_content %}
+								<li>{{error}}</li>
+							{% endfor %}
+						</ul>
+					</div>
+				{% endif %}
+
+				{% if not error_indent is empty%}
+					<div class="indent">
+						<label>L'indentation est incorrect :</label>
+						<ul>
+							{% for error in error_indent %}
+								<li>{{error}}</li>
+							{% endfor %}
+						</ul>
+					</div>
+				{% endif %}
+
+
+			</div>
+		{% endif %}
+
 
 		<table id="lines" class="table table-striped">
 			<thead>
 				<tr>
 					<th>Rang</th>
-					<th>Identation</th>
+					<th>Indentation</th>
 					<th>Contenu</th>
 				</tr>
 			</thead>
 
-			{% for line in random_lignes %}
-				{% set rank = line.ranking %}
+			{{ form_start(form)}}
+
+			{% for line in form.lines %}
 
 				<tbody>
-					<tr class="{{'getData'}}">
+					<tr>
+						<td>{{ form_widget(line.ranking) }}</td>
+						<td>{{ form_widget(line.indentation) }}</td>
+						<td>{{ form_widget(line.content) }}</td>
 
-
-						<td>
-							<input type="number" name="{{'rank'~ rank}}" id="{'rank'~ rank}}" min="0" max="{{ loop.length - 1}}">
-						</td>
-						<td>
-							<input type="number" name="{{'indentation'~ rank}}" id="{{'indentation'~ rank}}" min="0" max="99">
-						</td>
-						<td>
-							{{ line.content }}
-						</td>
 					</tr>
 				</tbody>
 
@@ -67,36 +100,21 @@
 
 				<ul class="navbar-nav ml-auto">
 					<li class="nav-item">
-						<a id="validate" class="btn btn-success" href="">Valider</a>
+						<button type="submit" class="btn btn-success">
+							Valider
+						</button>
 					</li>
 				</ul>
 
 			</div>
 		</nav>
 
+		{{ form_end(form) }}
+
 
 	</article>
-
 {% endblock %}
 
-
 {% block javascripts %}
-	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-
-	<script>
-		document.getElementById("validate").addEventListener("submit", function (e) {
-e.preventDefault();
-
-var erreur;
-var correct;
-
-if (erreur) {
-document.getElementById("erreur").innerHtml = erreur;
-}
-
-if (correct) {
-document.getElementById("correct").innerHtml = correct;
-}
-})
-	</script>
+	{# POUR LA VALIDATION SANS CHANGER DE PAGE #}
 {% endblock %}

@@ -8,12 +8,12 @@ use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class LinesTaskType extends AbstractType
+class StudentLinesTaskType extends AbstractType
 {
   public function buildForm(FormBuilderInterface $builder, array $options)
   {
     $builder->add('lines', CollectionType::class, [
-      'entry_type' => LineType::class,
+      'entry_type' => StudentLineType::class,
       'entry_options' => ['label' => false],
     ]);
   }

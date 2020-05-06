@@ -92,7 +92,6 @@ class EditorController extends AbstractController
             return $this->redirectToRoute('editor_create_exercise_lines', [
                 'id1' => $cours->getId(),
                 'id2' => $exercise->getId(),
-                'editMode' => $editMode
             ]);
         }
 
@@ -105,8 +104,10 @@ class EditorController extends AbstractController
     /**
      * @Route("/cours/{id1}/exercice/{id2}/newLines", name="create_exercise_lines")
      */
-    public function form_exercise_lines($id1, $id2, $editMode = false, Request $request, EntityManagerInterface $manager, ExerciseRepository $repo)
+    public function form_exercise_lines($id1, $id2, Request $request, EntityManagerInterface $manager, ExerciseRepository $repo)
     {
+
+
         $exercise = $repo->find($id2);
 
         $task = new LinesTask();
@@ -114,7 +115,9 @@ class EditorController extends AbstractController
 
         $nbLinesUser =  $exercise->getnbLines();
         $nbLinesData = $exercise->getLignes()->count();
+        $editMode = $nbLinesData == 0;
         $diff = $nbLinesUser - $nbLinesData;
+
 
         if ($diff == $nbLinesUser) {
             for ($i = 0; $i < $nbLinesUser; $i++) {
