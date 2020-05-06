@@ -21,6 +21,9 @@
 			{{exercise.description}}
 		</p>
 
+		<span style="color: red;" id="erreur"></span>
+		<span style="color: green;" id="correct"></span>
+
 		<table id="lines" class="table table-striped">
 			<thead>
 				<tr>
@@ -34,7 +37,9 @@
 				{% set rank = line.ranking %}
 
 				<tbody>
-					<tr>
+					<tr class="{{'getData'}}">
+
+
 						<td>
 							<input type="number" name="{{'rank'~ rank}}" id="{'rank'~ rank}}" min="0" max="{{ loop.length - 1}}">
 						</td>
@@ -62,7 +67,7 @@
 
 				<ul class="navbar-nav ml-auto">
 					<li class="nav-item">
-						<a class="btn btn-success" href="">Valider</a>
+						<a id="validate" class="btn btn-success" href="">Valider</a>
 					</li>
 				</ul>
 
@@ -72,4 +77,26 @@
 
 	</article>
 
+{% endblock %}
+
+
+{% block javascripts %}
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+	<script>
+		document.getElementById("validate").addEventListener("submit", function (e) {
+e.preventDefault();
+
+var erreur;
+var correct;
+
+if (erreur) {
+document.getElementById("erreur").innerHtml = erreur;
+}
+
+if (correct) {
+document.getElementById("correct").innerHtml = correct;
+}
+})
+	</script>
 {% endblock %}
