@@ -117,7 +117,7 @@ class ProfileController extends AbstractController
     /**
      * @Route("/cours/{id1}/exercice/{id2}", name="show_exercises")
      */
-    public function valideLines($id1, $id2, Request $request, ExerciseRepository $repo)
+    public function valideLines($id1, $id2, Request $request,  EntityManagerInterface $manager, ExerciseRepository $repo)
     {
         $exercise = $repo->find($id2);
         $random_lignes = $exercise->getLignes()->toArray();
@@ -169,6 +169,8 @@ class ProfileController extends AbstractController
         return $this->render('profile/showExercise.html.twig', [
             'succes' => false,
             'random_lignes' => $random_lignes,
+            'error_content' => [],
+            'error_indent' => [],
             'exercise' => $exercise,
             'form' => $form->createView(),
             'id1' => $id1,

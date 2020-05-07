@@ -21,8 +21,9 @@
 			{{exercise.description}}
 		</p>
 
+		<hr>
 		<div class="enonce_general">
-			<label>A remettre dans le bonne ordre et la bonne identation</label>
+			<label>A remettre dans le bon ordre avec la bonne identation</label>
 			<ul>
 				{% for line in random_lignes %}
 					<li>{{ line.content }}</li>
@@ -34,6 +35,7 @@
 			{# TODO : succes #}
 		{% else %}
 
+			<hr>
 			<div class="errors">
 
 				{% if not error_content is empty%}
@@ -98,13 +100,15 @@
 					</li>
 				</ul>
 
-				<ul class="navbar-nav ml-auto">
-					<li class="nav-item">
-						<button type="submit" class="btn btn-success">
-							Valider
-						</button>
-					</li>
-				</ul>
+				{%  if not is_granted('ROLE_EDITOR') %}
+					<ul class="navbar-nav ml-auto">
+						<li class="nav-item">
+							<button id="submit" type="submit" class="btn btn-success">
+								Valider
+							</button>
+						</li>
+					</ul>
+				{% endif %}
 
 			</div>
 		</nav>
@@ -115,6 +119,3 @@
 	</article>
 {% endblock %}
 
-{% block javascripts %}
-	{# POUR LA VALIDATION SANS CHANGER DE PAGE #}
-{% endblock %}
