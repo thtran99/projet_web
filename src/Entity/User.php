@@ -60,9 +60,15 @@ class User implements UserInterface
      */
     private $roles = [];
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Notation", mappedBy="student")
+     */
+    private $notations;
+
     public function __construct()
     {
         $this->lessons = new ArrayCollection();
+        $this->notations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -166,5 +172,36 @@ class User implements UserInterface
 
     public function getSalt()
     {
+    }
+
+    /**
+     * @return Collection|Notation[]
+     */
+    public function getNotations(): Collection
+    {
+        return $this->notations;
+    }
+
+    public function addNotation(Notation $notation): self
+    {
+        if (!$this->notations->contains($notation)) {
+            $this->notations[] = $notation;
+            $notation->setStudent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNotation(Notation $notation): self
+    {
+        if ($this->notations->contains($notation)) {
+            $this->notations->removeElement($notation);
+            // set the owning side to null (unless already changed)
+            if ($notation->getStudent() === $this) {
+                $notation->setStudent(null);
+            }
+        }
+
+        return $this;
     }
 }

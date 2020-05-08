@@ -44,9 +44,15 @@ class Exercise
      */
     private $nbLines;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Notation", mappedBy="exercise")
+     */
+    private $notations;
+
     public function __construct()
     {
         $this->lignes = new ArrayCollection();
+        $this->notations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -141,6 +147,37 @@ class Exercise
     public function setnbLines(int $nbLines): self
     {
         $this->nbLines = $nbLines;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Notation[]
+     */
+    public function getNotations(): Collection
+    {
+        return $this->notations;
+    }
+
+    public function addNotation(Notation $notation): self
+    {
+        if (!$this->notations->contains($notation)) {
+            $this->notations[] = $notation;
+            $notation->setExercise($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNotation(Notation $notation): self
+    {
+        if ($this->notations->contains($notation)) {
+            $this->notations->removeElement($notation);
+            // set the owning side to null (unless already changed)
+            if ($notation->getExercise() === $this) {
+                $notation->setExercise(null);
+            }
+        }
 
         return $this;
     }
