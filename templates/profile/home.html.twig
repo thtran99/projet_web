@@ -4,25 +4,4 @@
 
   <h1> Bonjour {{app.user.username}} !</h1>
 
-  <hr> 
-
-  <h2>Vos cours : </h2>
-
-  <hr>
-
-  {% for cour in app.user.lessons %}
-
-    <section class="cours">
-
-        <article>
-            <h3> <a href="{{path('profile_show_cours', {'id' : cour.id})}}"> {{cour.title}}</a> </h3>
-            <div class="metadata"> Ecrit le {{cour.createdAt | date('d/m/Y')}} à {{cour.createdAt | date('H:i')}} par {{cour.createdBy}}</div>
-
-            <hr>
-        </article>
-
-    </section>  
-
-  {% endfor %}
-
 {% endblock %}

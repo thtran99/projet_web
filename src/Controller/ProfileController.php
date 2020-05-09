@@ -99,7 +99,7 @@ class ProfileController extends AbstractController
     /**
      * @Route("/cours/{id1}/exercice/{id2}", name="show_exercises")
      */
-    public function valideLines($id1, $id2, Request $request,  EntityManagerInterface $manager, ExerciseRepository $repo, NotationRepository $notationRepository)
+    public function valideLines($id1, $id2, Request $request,  EntityManagerInterface $manager, ExerciseRepository $repo)
     {
         $exercise = $repo->find($id2);
         /* On mélange les lignes pour que l'étudiant les remette en place */
@@ -188,5 +188,21 @@ class ProfileController extends AbstractController
             'id1' => $id1,
             'id2' => $id2
         ]);
+    }
+
+    /**
+     * @Route("/mesExercices", name="my_exercises")
+     */
+    public function my_exercise()
+    {
+        return $this->render('/profile/myExercises.html.twig');
+    }
+
+    /**
+     * @Route("/mesCours", name="my_lessons")
+     */
+    public function my_lessons()
+    {
+        return $this->render('/profile/myLessons.html.twig');
     }
 }
