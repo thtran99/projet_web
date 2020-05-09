@@ -6,14 +6,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 
-
 use App\Repository\CoursRepository;
+use App\Repository\ExerciseRepository;
+use App\Repository\NotationRepository;
 use App\Entity\Cours;
 use App\Entity\Line;
 use App\Entity\LinesTask;
+use App\Entity\Notation;
 use App\Form\StudentLinesTaskType;
-use App\Form\StudentLineType;
-use App\Repository\ExerciseRepository;
+
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
@@ -51,25 +52,6 @@ class ProfileController extends AbstractController
             "cour" => $cour
         ]);
     }
-
-    // /**
-    //  * @Route("/cours/{id1}/exercice/{id2}", name="show_exercises")
-    //  */
-    // public function show_exo($id1, $id2, ExerciseRepository $repo)
-    // {
-
-    //     $exercise = $repo->find($id2);
-
-    //     $random_lignes = $exercise->getLignes()->toArray();
-
-    //     shuffle($random_lignes);
-
-    //     return $this->render('profile/showExercise.html.twig', [
-    //         'exercise' => $exercise,
-    //         'random_lignes' => $random_lignes
-    //     ]);
-    // }
-
 
     /**
      * @Route("/cours/{id}/inscription", name="registerLesson",
@@ -117,12 +99,28 @@ class ProfileController extends AbstractController
     /**
      * @Route("/cours/{id1}/exercice/{id2}", name="show_exercises")
      */
-    public function valideLines($id1, $id2, Request $request,  EntityManagerInterface $manager, ExerciseRepository $repo)
+    public function valideLines($id1, $id2, Request $request,  EntityManagerInterface $manager, ExerciseRepository $repo, NotationRepository $notationRepository)
     {
         $exercise = $repo->find($id2);
+        /* On mélange les lignes pour que l'étudiant les remette en place */
         $random_lignes = $exercise->getLignes()->toArray();
         shuffle($random_lignes);
         $task = new LinesTask();
+        $notation = null;
+
+
+        /* Récupere la note si elle existe sinon la créer */
+        $user = $this->getUser();
+        $notation = $user->getNotation($exercise);
+        if ($notation == null) {
+            $notation = new Notation();
+            $notation->setStudent($user);
+            $notation->setExercise($exercise);
+            $notation->setNote(0);
+        }
+
+        $succes = $notation->getNote() == 100;
+
 
         for ($i = 0; $i < $exercise->getnbLines(); $i++) {
             $line = new Line();
@@ -136,10 +134,13 @@ class ProfileController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $error_content = [];
-            $error_indent = [];
-            $succes = false;
+            $error_content = []; // erreur lié aux lignes
+            $error_indent = []; // erreur lié aux indentation
 
+            $good_line = 0;
+            $note = 0;
+
+            /* On analyse ligne par ligne si les entrées de l'étudiant correspondent à la correction  */
             for ($i = 0; $i < $exercise->getnbLines(); $i++) {
                 $etu_line = $task->getLines()->get($i);
                 $exo_line = $exercise->getLignes()->get($i);
@@ -147,14 +148,24 @@ class ProfileController extends AbstractController
                     array_push($error_content, 'ligne ' . $i);
                 } else if ($etu_line->getIndentation() != $exo_line->getIndentation()) {
                     array_push($error_indent, 'ligne ' . $i);
+                } else {
+                    $good_line++;
                 }
             }
 
-            if (empty($error_indent) && empty($error_indent)) {
+            /* On attribue la note en pourcentage */
+            $note =  $good_line * 100 / $exercise->getnbLines();
+            $notation->setNote($note);
+            $manager->persist($notation);
+            $manager->flush();
+            /* Fin de la note */
+
+            if ($note == 100) {
                 $succes = true;
             }
 
             return $this->render('profile/showExercise.html.twig', [
+                'note' => $note,
                 'succes' => $succes,
                 'error_content' => $error_content,
                 'error_indent' => $error_indent,
@@ -167,7 +178,8 @@ class ProfileController extends AbstractController
         }
 
         return $this->render('profile/showExercise.html.twig', [
-            'succes' => false,
+            'note' => $notation->getNote(),
+            'succes' => $succes,
             'random_lignes' => $random_lignes,
             'error_content' => [],
             'error_indent' => [],

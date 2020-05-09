@@ -12,18 +12,13 @@
 
 		<div class="group"></div>
 
-		<h3>
-			<ins>Enoncé :
-			</ins>
-		</h3>
-
 		<p>
 			{{exercise.description}}
 		</p>
 
 		<hr>
-		<div class="enonce_general">
-			<label>A remettre dans le bon ordre avec la bonne identation</label>
+		<div class="enonce-general">
+			<label> <ins>A remettre dans le bon ordre avec la bonne indentation </ins></label>
 			<ul>
 				{% for line in random_lignes %}
 					<li>{{ line.content }}</li>
@@ -31,14 +26,19 @@
 			</ul>
 		</div>
 
+		<div class="progress">
+  		<div class="progress-bar bg-success" role="progressbar" style="width: {{note}}%"></div>
+		</div>
+		
+
 		{% if succes %}
-			{# TODO : succes #}
+			<div class="succes"> <h2>Bravo, vous avez validé l'exercice !</h2></div>
 		{% else %}
 
-			<hr>
 			<div class="errors">
 
 				{% if not error_content is empty%}
+					<hr>
 					<div class="content">
 						<label>Le contenue de la ligne est incorrect</label>
 						<ul>

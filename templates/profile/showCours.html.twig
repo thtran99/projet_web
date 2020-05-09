@@ -33,19 +33,46 @@
 
 	</article>
 
-	<section class="list-group">
-
 		{% if is_granted('ROLE_EDITOR') %}
 			{% set route = "editor" %}
 		{% else %}
 			{% set route = "profile"%}
 		{% endif %}
 
-		{% for exercise in cour.exercises  %}
 
-			<a href="{{path(route ~'_show_exercises', {'id1' : cour.id, 'id2' : exercise.id})}}" class=" list-group-item list-group-item-action">{{exercise.title}}</a>
-		{% endfor %}
-	</section>
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th scope="col">Titre</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for exercise in cour.exercises  %}
+
+					{% if app.user.getNotation(exercise) == null %}
+						{% set status = "table-primary" %}
+					{% elseif app.user.getNotation(exercise).getNote == 100 %}
+						{% set status = "table-success"%}
+					{% elseif app.user.getNotation(exercise).getNote >= 50 %}
+						{% set status = "table-warning" %}
+					{% else %}
+						{% set status = "table-danger" %}
+					{% endif %}
+
+					<tr class="{{status}}">
+						<td>
+							<a href="{{path(route ~'_show_exercises', {'id1' : cour.id, 'id2' : exercise.id})}}">
+								<div style="height:100%;width:100%">
+								{{exercise.title}}
+								</div>
+							</a>
+						</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table> 
+
+		
 
 	{% if is_granted('ROLE_EDITOR') and app.user in cour.users %}
 		<hr>

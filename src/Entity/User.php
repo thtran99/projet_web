@@ -204,4 +204,15 @@ class User implements UserInterface
 
         return $this;
     }
+
+    public function getNotation($exercise)
+    {
+        foreach ($this->notations as $notation) {
+            if ($notation->getExercise() == $exercise) {
+                return $notation;
+            }
+        }
+
+        return null;
+    }
 }
