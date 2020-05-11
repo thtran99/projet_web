@@ -46,10 +46,10 @@
                             <a class="nav-link" href="{{path('profile_cours')}}">Tous les cours</a>
                         </li>
 
-                        {%  if not is_granted('ROLE_EDITOR') %}
                          <li class="nav-item">
                             <a class="nav-link" href="{{path('profile_my_lessons')}}">Mes cours</a>
                         </li>
+                        {%  if not is_granted('ROLE_EDITOR') %}
                         <li class="nav-item">
                             <a class="nav-link" href="{{path('profile_my_exercises')}}">Mes exercices</a>
                         </li>

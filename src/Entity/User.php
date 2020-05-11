@@ -215,4 +215,19 @@ class User implements UserInterface
 
         return null;
     }
+
+    public function my_lesson(Cours $cours): bool
+    {
+        return in_array($cours, ($this->lessons)->toArray());
+    }
+
+    public function my_exercise(Exercise $exercise): bool
+    {
+        foreach ($this->lessons as $lesson) {
+            if (in_array($exercise, ($lesson->getExercises())->toArray())) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

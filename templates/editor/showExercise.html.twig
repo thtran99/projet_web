@@ -59,11 +59,14 @@
 					</li>
 				</ul>
 
-				<ul class="navbar-nav ml-auto">
-					<li class="nav-item">
-						<a class="btn btn-primary" href="{{path('editor_edit_exercise', {'id1': id1, 'id2': id2}) }}">Modifier l'exercice</a>
-					</li>
-				</ul>
+
+				{% if app.user.my_exercise(exercise)%}
+					<ul class="navbar-nav ml-auto">
+						<li class="nav-item">
+							<a class="btn btn-primary" href="{{path('editor_edit_exercise', {'id1': id1, 'id2': id2}) }}">Modifier l'exercice</a>
+						</li>
+					</ul>
+				{% endif %}
 
 			</div>
 		</nav>
@@ -72,4 +75,3 @@
 	</article>
 
 {% endblock %}
-

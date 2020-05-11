@@ -12,6 +12,7 @@ use App\Form\LinesTaskType;
 use App\Form\LineType;
 use App\Repository\CoursRepository;
 use App\Repository\ExerciseRepository;
+use App\Repository\NotationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -31,8 +32,15 @@ class EditorController extends AbstractController
      */
     public function form_cours(Cours $cours = null, Request $request, EntityManagerInterface $manager)
     {
+
         if (!$cours) {
             $cours = new Cours();
+        } else {
+            if (!$this->getUser()->my_lesson($cours)) {
+                return $this->redirectToRoute('profile_show_cours', [
+                    'id' => $cours->getId()
+                ]);
+            }
         }
 
         $form = $this->createForm(CoursType::class, $cours);
@@ -75,6 +83,12 @@ class EditorController extends AbstractController
 
         if ($editMode) {
             $exercise = $repo_exo->find($id2);
+            if (!$this->getUser()->my_exercise($exercise)) {
+                return $this->redirectToRoute('editor_show_exercises', [
+                    'id1' => $id1,
+                    'id2' => $id2
+                ]);
+            }
         } else {
             $exercise = new Exercise();
         }
