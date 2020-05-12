@@ -49,6 +49,11 @@ class Exercise
      */
     private $notations;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $attempts;
+
     public function __construct()
     {
         $this->lignes = new ArrayCollection();
@@ -178,6 +183,18 @@ class Exercise
                 $notation->setExercise(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getAttempts(): ?int
+    {
+        return $this->attempts;
+    }
+
+    public function setAttempts(?int $attempts): self
+    {
+        $this->attempts = $attempts;
 
         return $this;
     }

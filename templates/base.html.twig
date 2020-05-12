@@ -1,89 +1,90 @@
 <!DOCTYPE html>
 <html>
 
-    {% if app.user %}
-        {% if is_granted('ROLE_EDITOR') %}
-            {% set titre = "ZOOM TEACH" %}
-        {% else %}
-            {% set titre = "ZOOM LEARN" %}
-        {% endif %}
-    {% else %}
-        {% set titre = "ZOOM ZOOM" %}
-    {% endif %}
-    <head>
-        <meta charset="UTF-8">
-        <title>
-        
-        {% block title %}
-            {{ titre }}
-       {% endblock %}</title>
+	{% if app.user %}
+		{% if is_granted('ROLE_EDITOR') %}
+			{% set titre = "ZOOM TEACH" %}
+		{% else %}
+			{% set titre = "ZOOM LEARN" %}
+		{% endif %}
+	{% else %}
+		{% set titre = "ZOOM ZOOM" %}
+	{% endif %}
+	<head>
+		<meta charset="UTF-8">
+		<title>
 
-        <link rel="stylesheet" type="text/css" href="https://bootswatch.com/4/lux/bootstrap.min.css">
-        {% block stylesheets %}{% endblock %}
-    </head>
+			{% block title %}
+				{{ titre }}
+			{% endblock %}
+		</title>
 
-    <body>
+		<link rel="stylesheet" type="text/css" href="https://bootswatch.com/4/lux/bootstrap.min.css"> {% block stylesheets %}{% endblock %}
+		</head>
 
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <a class="navbar-brand" href="{{path('profile_home')}}"> {{ titre }}</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+		<body>
 
-            <div class="collapse navbar-collapse" id="navbarColor02">
-                 <ul class="navbar-nav mr-auto">
+			<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+				<a class="navbar-brand" href="{{path('profile_home')}}">
+					{{ titre }}</a>
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
 
-                    {% if not app.user %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{path('security_registration')}}">Inscription</a>
-                        </li>
+				<div class="collapse navbar-collapse" id="navbarColor02">
+					<ul class="navbar-nav mr-auto">
 
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{path('security_login')}}">Connexion</a>
-                        </li>
-                    {% else %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{path('profile_cours')}}">Tous les cours</a>
-                        </li>
+						{% if not app.user %}
+							<li class="nav-item">
+								<a class="nav-link" href="{{path('security_registration')}}">Inscription</a>
+							</li>
 
-                         <li class="nav-item">
-                            <a class="nav-link" href="{{path('profile_my_lessons')}}">Mes cours</a>
-                        </li>
-                        {%  if not is_granted('ROLE_EDITOR') %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{path('profile_my_exercises')}}">Mes exercices</a>
-                        </li>
-                        {% endif %}
+							<li class="nav-item">
+								<a class="nav-link" href="{{path('security_login')}}">Connexion</a>
+							</li>
+						{% else %}
+							<li class="nav-item">
+								<a class="nav-link" href="{{path('profile_cours')}}">Tous les cours</a>
+							</li>
 
-                        {%  if is_granted('ROLE_EDITOR') %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{path('editor_create_cours')}}">Créer un cours</a>
-                        </li>
-                        {% endif %}
+							<li class="nav-item">
+								<a class="nav-link" href="{{path('profile_my_lessons')}}">Mes cours</a>
+							</li>
+
+							<li class="nav-item">
+								<a class="nav-link" href="{{path('profile_my_exercises')}}">Mes exercices</a>
+							</li>
 
 
-                    {% endif %}
+							{%  if is_granted('ROLE_EDITOR') %}
+								<li class="nav-item">
+									<a class="nav-link" href="{{path('editor_create_cours')}}">Créer un cours</a>
+								</li>
+							{% endif %}
 
-                    
 
-                </ul>
+						{% endif %}
 
-                    {% if app.user %}
-                        <ul class="navbar-nav ml-auto">
 
-                            <li class="nav-item">
-                                <a class="nav-link " href="{{path('security_logout')}}">Deconnexion ({{app.user.username}})</a>
-                            </li>
-                        </ul>
-                    {% endif %}
+					</ul>
 
-            </div>
-        </nav>
+					{% if app.user %}
+						<ul class="navbar-nav ml-auto">
 
-    <div class="container">
-        {% block body %}Bienvenue sur ZOOM LEARN{% endblock %}
-    </div>
-        {% block javascripts %}{% endblock %}
-    </body>
+							<li class="nav-item">
+								<a class="nav-link " href="{{path('security_logout')}}">Deconnexion ({{app.user.username}})</a>
+							</li>
+						</ul>
+					{% endif %}
 
-</html>
+				</div>
+			</body>
+		</body>
+	</html>
+</nav>
+
+<div class="container">
+	{% block body %}Bienvenue sur ZOOM LEARN
+	{% endblock %}
+</div>
+{% block javascripts %}{% endblock %}</body></html>
