@@ -20,13 +20,38 @@
 
 			{% for lesson in app.user.lessons %}
 
+				{% if is_granted('ROLE_EDITOR') %}
+					{% set succes = lesson.success_rate %}
+					{% if succes == 'NOT DEFINED' %}
+						{% set stat = "secondary" %}
+					{% elseif succes == 100  %}
+						{% set stat = "success"%}
+					{% elseif succes >= 50  %}
+						{% set stat = "warning" %}
+					{% else %}
+						{% set stat = "danger" %}
+					{% endif %}
+				{% endif %}
+
+
 				<td>
 					<a href="{{path('profile_show_cours', {'id' : lesson.id})}}">
 						<div style="height:100%;width:100%">
-							<h3>{{lesson.title}}</h3>
+							<h3>{{lesson.title}}
+								{% if is_granted('ROLE_EDITOR') %}
+									<span class="badge badge-pill badge-{{stat}}">
+										{{succes}}
+									</span>
+								{% endif %}
+							</h3>
+
+
 						</div>
 					</a>
+
+
 				</td>
+
 
 				<table class="table table-hover">
 					{% if is_granted('ROLE_EDITOR') %}
@@ -42,14 +67,27 @@
 					<tbody>
 						{% for exercise in lesson.exercises %}
 
-							{% if app.user.getNotation(exercise) == null %}
-								{% set status = "table-secondary" %}
-							{% elseif app.user.getNotation(exercise).getNote == 100 %}
-								{% set status = "table-success"%}
-							{% elseif app.user.getNotation(exercise).getNote >= 50 %}
-								{% set status = "table-warning" %}
+							{% if is_granted('ROLE_EDITOR') %}
+								{% set succes_rate = exercise.success_rate %}
+								{% if succes_rate == 'NOT DEFINED' %}
+									{% set status = "table-secondary" %}
+								{% elseif succes_rate == 100  %}
+									{% set status = "table-success"%}
+								{% elseif succes_rate >= 50  %}
+									{% set status = "table-warning" %}
+								{% else %}
+									{% set status = "table-danger" %}
+								{% endif %}
 							{% else %}
-								{% set status = "table-danger" %}
+								{% if app.user.getNotation(exercise) == null %}
+									{% set status = "table-secondary" %}
+								{% elseif app.user.getNotation(exercise).getNote == 100 %}
+									{% set status = "table-success"%}
+								{% elseif app.user.getNotation(exercise).getNote >= 50 %}
+									{% set status = "table-warning" %}
+								{% else %}
+									{% set status = "table-danger" %}
+								{% endif %}
 							{% endif %}
 
 							<tr class="{{status}}">
@@ -70,7 +108,6 @@
 					</tbody>
 				{% endfor %}
 			</table>
-
 		</tbody>
-	</table>
-{% endblock %}
+	</tbody>
+</table>{% endblock %}

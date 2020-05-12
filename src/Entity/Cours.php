@@ -177,4 +177,28 @@ class Cours
 
         return $this;
     }
+
+    public function success_rate()
+    {
+        $total = $this->exercises->count();
+        if ($total == 0) {
+            return 'NOT DEFINED';
+        }
+
+        $success = 0;
+        foreach ($this->exercises as $exercise) {
+            $exo_rate = $exercise->success_rate();
+            if ($exo_rate != 'NOT DEFINED') {
+                $success += $exo_rate;
+            } else {
+                $total--;
+            }
+        }
+
+        if ($total == 0) {
+            return 'NOT DEFINED';
+        }
+
+        return $success  / $total;
+    }
 }

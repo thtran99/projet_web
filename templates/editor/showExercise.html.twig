@@ -47,8 +47,31 @@
 
 		</table>
 
-		<hr>
+		<div>
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>Etudiant</th>
+						<th>Note</th>
+					</tr>
+				</thead>
 
+				{% for notation in exercise.notations %}
+					<tbody>
+						<tr>
+							<td>
+								{{notation.student.username}}
+							</td>
+							<td>
+								{{notation.note}}</td>
+						</tr>
+					</tbody>
+
+				{% endfor %}
+			</table>
+		</div>
+
+		<hr>
 
 		<nav class="navbar navbar-expand-lg ">
 			<div class="collapse navbar-collapse" id="navbarColor04">
