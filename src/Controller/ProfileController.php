@@ -57,7 +57,7 @@ class ProfileController extends AbstractController
      * @Route("/cours/{id}/inscription", name="registerLesson",
      * requirements= {"id" = "\d+"})
      */
-    public function registerLesson(Cours $cour, EntityManagerInterface $manager)
+    public function registerLesson($id, Cours $cour, EntityManagerInterface $manager)
     {
 
         if (!$this->isGranted('ROLE_EDITOR')) {
@@ -68,10 +68,14 @@ class ProfileController extends AbstractController
 
             $manager->flush();
 
-            return $this->redirectToRoute("profile_home");
+            return $this->redirectToRoute("profile_show_cour", [
+                'id' => $id
+            ]);
         }
 
-        return $this->redirectToRoute("profile_home");
+        return $this->redirectToRoute("profile_show_cour", [
+            'id' => $id
+        ]);
     }
 
 
@@ -79,7 +83,7 @@ class ProfileController extends AbstractController
      * @Route("/cours/{id}/desinscription", name="unregisterLesson",
      * requirements= {"id" = "\d+"})
      */
-    public function unregisterLesson(Cours $cour, EntityManagerInterface $manager)
+    public function unregisterLesson($id, Cours $cour, EntityManagerInterface $manager)
     {
 
         if (!$this->isGranted('ROLE_EDITOR')) {
@@ -90,10 +94,14 @@ class ProfileController extends AbstractController
 
             $manager->flush();
 
-            return $this->redirectToRoute("profile_home");
+            return $this->redirectToRoute("profile_show_cour", [
+                'id' => $id
+            ]);
         }
 
-        return $this->redirectToRoute("profile_home");
+        return $this->redirectToRoute("profile_show_cour", [
+            'id' => $id
+        ]);
     }
 
     /**
@@ -152,6 +160,8 @@ class ProfileController extends AbstractController
                     $good_line++;
                 }
             }
+
+            $exercise->addAttemps();
 
             /* On attribue la note en pourcentage */
             $note =  $good_line * 100 / $exercise->getnbLines();

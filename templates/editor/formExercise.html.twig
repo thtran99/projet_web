@@ -13,39 +13,38 @@
 
 {% block body%}
 
-{% if editMode %}
-	<h1>
-		Modification de l'exercice
-	</h1>
-{% else %}
-	<h1>
-		Création d'un exercice
-	</h1>
-{% endif %}
+	{% if editMode %}
+		<h1>
+			Modification de l'exercice
+		</h1>
+	{% else %}
+		<h1>
+			Création d'un exercice
+		</h1>
+	{% endif %}
 
-{{ form_start(form)}}
+	{{ form_start(form)}}
 
-{{ form_row(form.title, {'label':'Titre', 'attr' : {'placeholder' : 'Titre du cours'}}) }}
+	{{ form_row(form.title, {'label':'Titre', 'attr' : {'placeholder' : 'Titre de l\'exercice'}}) }}
 
 {{ form_row(form.description, {'label':'Description', 'attr' : { 'placeholder' : 'Description de l\'exercice'}}) }}
 
-{{ form_row(form.nbLines, {'label':'Nombre de lignes', 'attr' : { 'placeholder' : 'Nombre entre 1 et 100'}}) }}
+	{{ form_row(form.nbLines, {'label':'Nombre de lignes', 'attr' : { 'placeholder' : 'Nombre entre 1 et 100'}}) }}
 
-  
 
-  <nav class="navbar navbar-expand-lg ">
+	<nav class="navbar navbar-expand-lg ">
 		<div class="collapse navbar-collapse" id="navbarColor04">
 			<ul class="navbar-nav ml-auto">
 				<li class="nav-item">
-          <button type="submit" class="btn btn-success">
-            Suivant
-          </button>
+					<button type="submit" class="btn btn-success">
+						Suivant
+					</button>
 				</li>
 			</ul>
 		</div>
 	</nav>
 
-  {{ form_end(form) }}
+	{{ form_end(form) }}
 
 
 {% endblock %}

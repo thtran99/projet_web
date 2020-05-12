@@ -4,124 +4,131 @@
 {% endblock %}
 
 {% block body %}
-	<article>
-		<h2>
-			{{ cour.title }}</h2>
-		<div class="metadata">
-			Ecrit le
-			{{cour.createdAt | date('d/m/Y')}}
-			à
-			{{cour.createdAt | date('H:i')}}
-			par
-			{{cour.createdBy}}</div>
-		<hr>
+<article>
+	<h2>
+		{{ cour.title }}</h2>
+	<div class="metadata">
+		Ecrit le
+		{{cour.createdAt | date('d/m/Y')}}
+		à
+		{{cour.createdAt | date('H:i')}}
+		par
+		{{cour.createdBy}}</div>
 
-		<p>
-			{{cour.content | raw}}
-		</p>
-		<hr>
-
-		{% if is_granted('ROLE_EDITOR') and app.user in cour.users %}
-			<a href="{{path('editor_edit_cours', {'id' : cour.id})}}" class="btn btn-primary">
-				Modifier le cours</a>
-			<hr>
-		{% endif %}
-
-		<h3>Liste des exercices</h3>
-
-		<div class=""></div>
-
-	</article>
-
-		{% if is_granted('ROLE_EDITOR') %}
-			{% set route = "editor" %}
-		{% else %}
-			{% set route = "profile"%}
-		{% endif %}
-
-
-		<table class="table table-hover">
-			<thead>
-				<tr>
-					<th scope="col">Titre</th>
-				</tr>
-			</thead>
-			<tbody>
-				{% for exercise in cour.exercises  %}
-
-					{% if app.user.getNotation(exercise) == null %}
-						{% set status = "table-primary" %}
-					{% elseif app.user.getNotation(exercise).getNote == 100 %}
-						{% set status = "table-success"%}
-					{% elseif app.user.getNotation(exercise).getNote >= 50 %}
-						{% set status = "table-warning" %}
-					{% else %}
-						{% set status = "table-danger" %}
-					{% endif %}
-
-					<tr class="{{status}}">
-						<td>
-							<a href="{{path(route ~'_show_exercises', {'id1' : cour.id, 'id2' : exercise.id})}}">
-								<div style="height:100%;width:100%">
-								{{exercise.title}}
-								</div>
-							</a>
-						</td>
-					</tr>
-				{% endfor %}
-			</tbody>
-		</table> 
-
-		
-
-	{% if is_granted('ROLE_EDITOR') and app.user in cour.users %}
-		<hr>
-		<a href="{{path('editor_create_exercise', {'id1' : cour.id})}}" class="btn btn-primary">
-			Ajouter un exercice
-		</a>
-	{% endif %}
-
+	<div>
+		{{cour.content | raw}}
+	</div>
 
 	<hr>
 
-	<nav class="navbar navbar-expand-lg ">
+</article>
 
-		<div class="collapse navbar-collapse" id="navbarColor03">
+{% if is_granted('ROLE_EDITOR') %}
+	{% set route = "editor" %}
+{% else %}
+	{% set route = "profile"%}
+{% endif %}
 
-			<ul class="navbar-nav mr-auto">
 
-				<li class="nav-item">
-					<a href="{{path('profile_cours')}}" class="btn btn-primary">Retour</a>
-				</li>
+<table class="table table-hover">
 
-			</ul>
+	<h3>Liste des exercices</h3>
 
-			<ul class="navbar-nav ml-auto">
 
-				{% if is_granted('ROLE_EDITOR')%}
+	{% if not cour.exercises is empty %}
+		{% if is_granted('ROLE_EDITOR') %}
+			<thead>
+				<tr>
+					<th>Titre</th>
+					<th>Taux de reussite</th>
+					<th>Nombre de tentative</th>
+				</tr>
+			</thead>
+		{% endif %}
+	{% endif %}
+	<tbody>
+		{% for exercise in cour.exercises  %}
 
-					{% else %}
-
-						{% if app.user in cour.users %}
-
-							<li class="nav-item">
-								<a class="btn btn-danger" href="{{path('profile_unregisterLesson', {'id' : cour.id} )}}">Se désinscrire</a>
-							</li>
-
-						{% else %}
-
-							<li class="nav-item">
-								<a class="btn btn-success" href="{{path('profile_registerLesson', {'id' : cour.id} )}}">S'inscrire</a>
-							</li>
-
-						{% endif %}
-
+			{% if is_granted('ROLE_EDITOR') %}
+				{% set succes_rate = exercise.success_rate %}
+				{% if succes_rate == 'NOT DEFINED' %}
+					{% set status = "table-primary" %}
+				{% elseif succes_rate == 100  %}
+					{% set status = "table-success"%}
+				{% elseif succes_rate >= 50  %}
+					{% set status = "table-warning" %}
+				{% else %}
+					{% set status = "table-danger" %}
 				{% endif %}
+			{% else %}
+				{% if app.user.getNotation(exercise) == null %}
+					{% set status = "table-secondary" %}
+				{% elseif app.user.getNotation(exercise).getNote == 100 %}
+					{% set status = "table-success"%}
+				{% elseif app.user.getNotation(exercise).getNote >= 50 %}
+					{% set status = "table-warning" %}
+				{% else %}
+					{% set status = "table-danger" %}
+				{% endif %}
+			{% endif %}
 
-			</ul>
+			<tr class="{{status}}">
+				<td>
+					{% if app.user in cour.users %}
+						<a href="{{path(route ~'_show_exercises', {'id1' : cour.id, 'id2' : exercise.id})}}">
+							<div style="height:100%;width:100%">
+								{{exercise.title}}
+							</div>
+						</a>
+					{% else %}
+						{{exercise.title}}
+					{% endif %}
+				</td>
 
-		</div>
+				{% if is_granted('ROLE_EDITOR') %}
+					<td>{{exercise.success_rate}}</td>
+					<td>{{exercise.attempts}}</td>
+				{% endif %}
+			</tr>
+		</td>
+	</tbody>
+</tr>{% endfor %}</tbody></table>{% if is_granted('ROLE_EDITOR') and app.user in cour.users %}<nav class="navbar navbar-expand-lg "><div class="collapse navbar-collapse" id="navbarColor03">
 
-	</nav>
+<ul class="navbar-nav mr-auto">
 
-{% endblock %}
+	<li>
+		<a href="{{path('editor_edit_cours', {'id' : cour.id})}}" class="btn btn-primary">
+			Modifier le cours</a>
+	</li>
+
+	<li>
+		<a href="{{path('editor_create_exercise', {'id1' : cour.id})}}" class="btn btn-success">
+			Ajouter un exercice
+		</a>
+	</li>
+
+</ul></div></nav>{% endif %}<nav class="navbar navbar-expand-lg "><div class="collapse navbar-collapse" id="navbarColor03"><ul class="navbar-nav mr-auto">
+
+<li class="nav-item">
+	<a href="{{path('profile_cours')}}" class="btn btn-primary">Retour</a>
+</li></ul><ul class="navbar-nav ml-auto">
+
+{% if is_granted('ROLE_EDITOR')%}
+
+	{% else %}
+
+		{% if app.user in cour.users %}
+
+			<li class="nav-item">
+				<a class="btn btn-danger" href="{{path('profile_unregisterLesson', {'id' : cour.id} )}}">Se désinscrire</a>
+			</li>
+
+		{% else %}
+
+			<li class="nav-item">
+				<a class="btn btn-success" href="{{path('profile_registerLesson', {'id' : cour.id} )}}">S'inscrire</a>
+			</li>
+
+		{% endif %}
+
+{% endif %}</ul></div></nav>{% endblock %}

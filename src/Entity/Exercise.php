@@ -50,7 +50,7 @@ class Exercise
     private $notations;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="integer", nullable=false)
      */
     private $attempts;
 
@@ -58,6 +58,7 @@ class Exercise
     {
         $this->lignes = new ArrayCollection();
         $this->notations = new ArrayCollection();
+        $this->attempts = 0;
     }
 
     public function getId(): ?int
@@ -197,5 +198,29 @@ class Exercise
         $this->attempts = $attempts;
 
         return $this;
+    }
+
+    public function addAttemps()
+    {
+        $this->attempts++;
+
+        return $this;
+    }
+
+    public function success_rate()
+    {
+        $total = $this->notations->count();
+        if ($total == 0) {
+            return 'NOT DEFINED';
+        }
+
+        $success = 0;
+        foreach ($this->notations as $notation) {
+            if ($notation->getNote() == 100) {
+                $success++;
+            }
+        }
+
+        return ($success * 100) / $total;
     }
 }

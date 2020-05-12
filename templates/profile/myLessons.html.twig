@@ -1,26 +1,31 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Mes Cours{% endblock %}
+{% block title %}Mes Cours
+{% endblock %}
 
 {% block body %}
 
-  <h2>Mes cours</h2>
+	{% for cour in app.user.lessons %}
 
-  <hr>
+		<section class="cours">
 
-  {% for cour in app.user.lessons %}
+			<article>
+				<h3>
+					<a href="{{path('profile_show_cours', {'id' : cour.id})}}">{{cour.title}}</a>
+				</h3>
+				<div class="metadata">
+					Ecrit le
+					{{cour.createdAt | date('d/m/Y')}}
+					à
+					{{cour.createdAt | date('H:i')}}
+					par
+					{{cour.createdBy}}</div>
 
-    <section class="cours">
+			</article>
 
-        <article>
-            <h3> <a href="{{path('profile_show_cours', {'id' : cour.id})}}">{{cour.title}}</a> </h3>
-            <div class="metadata"> Ecrit le {{cour.createdAt | date('d/m/Y')}} à {{cour.createdAt | date('H:i')}} par {{cour.createdBy}}</div>
+		</section>
+		<hr>
 
-        </article>
-
-    </section>  
-    <hr>
-
-  {% endfor %}
+	{% endfor %}
 
 {% endblock %}
