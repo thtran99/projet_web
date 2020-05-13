@@ -68,12 +68,12 @@ class ProfileController extends AbstractController
 
             $manager->flush();
 
-            return $this->redirectToRoute("profile_show_cour", [
+            return $this->redirectToRoute("profile_show_cours", [
                 'id' => $id
             ]);
         }
 
-        return $this->redirectToRoute("profile_show_cour", [
+        return $this->redirectToRoute("profile_show_cours", [
             'id' => $id
         ]);
     }
@@ -94,12 +94,12 @@ class ProfileController extends AbstractController
 
             $manager->flush();
 
-            return $this->redirectToRoute("profile_show_cour", [
+            return $this->redirectToRoute("profile_show_cours", [
                 'id' => $id
             ]);
         }
 
-        return $this->redirectToRoute("profile_show_cour", [
+        return $this->redirectToRoute("profile_show_cours", [
             'id' => $id
         ]);
     }
@@ -198,14 +198,6 @@ class ProfileController extends AbstractController
             'id1' => $id1,
             'id2' => $id2
         ]);
-    }
-
-    /**
-     * @Route("/mesExercices", name="my_exercises")
-     */
-    public function my_exercise()
-    {
-        return $this->render('/profile/myExercises.html.twig');
     }
 
     /**
