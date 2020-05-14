@@ -26,7 +26,6 @@ class RegistrationType extends AbstractType
                 'expanded' => true,
                 'multiple' => true,
                 'label' => 'Statut',
-                'empty_data' => 'ROLE_USER'
             ]);
     }
 
