@@ -26,6 +26,7 @@
 		{% for lesson in app.user.lessons %}
 			<table class="table table-hover 1">
 				<tbody>
+
 					{% if route=='editor' %}
 						{% set succes = lesson.success_rate %}
 						{% if succes == '/' %}
@@ -51,15 +52,16 @@
 							</div>
 						</a>
 					</td>
+
 				</tbody>
 			</table>
 
 			<table class="table table-hover 2">
+
 				<thead>
 					<tr>
 						<th>Exercice</th>
 						{% if route=='editor' %}
-
 							<th>Taux de réussite</th>
 							<th>Nombre de tentative</th>
 						{% else %}
@@ -70,6 +72,7 @@
 
 				<tbody class="exercises">
 					{% for exercise in lesson.exercises %}
+
 						{% if route=='editor' %}
 							{% set succes_rate = exercise.success_rate %}
 							{% if succes_rate == '/' %}
@@ -99,21 +102,28 @@
 						{% endif %}
 
 						<tr class="{{status}}">
+
 							<td>
 								<a href="{{path(route ~'_show_exercises', {'id1' : lesson.id, 'id2' : exercise.id})}}">
 									<div style="height:100%;width:100%">{{exercise.title}}</div>
 								</a>
 							</td>
+
 							{% if route=='editor' %}
 								<td>{{exercise.success_rate}}</td>
 								<td>{{exercise.attempts}}</td>
 							{% else %}
 								<td>{{note}}</td>
 							{% endif %}
+
 						</tr>
+
 					{% endfor %}
 				</tbody>
-			{% endfor %}
-		</table>
+
+			</table>
+
+		{% endfor %}
+
 	{% endif %}
 {% endblock %}

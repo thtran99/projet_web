@@ -1,19 +1,30 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Cours
+{% block title %}
+	{{lesson.title}}
 {% endblock %}
 
 {% block body %}
 
-{% if is_granted('ROLE_EDITOR') %}
-	{% set route = "editor" %}
-{% else %}
-	{% set route = "profile"%}
-{% endif %}
+	{#  Condition qui se répète souvent / Evite de recalculer #}
+	{% set user = app.user %}
 
-<article>
-	{% if route=='editor' %}
-		{% set succes = cour.success_rate %}
+	{% if is_granted('ROLE_EDITOR') %}
+		{% set route = "editor" %}
+		{% set student = false %}
+	{% else %}
+		{% set route = "profile"%}
+		{% set student = true %}
+	{% endif %}
+
+	{% if user in lesson.users%}
+		{% set own = true %}
+	{% else %}
+		{% set own = false %}
+	{% endif %}
+
+	{% if not student %}
+		{% set succes = lesson.success_rate %}
 		{% if succes == '/' %}
 			{% set stat = "secondary" %}
 		{% elseif succes == 100  %}
@@ -25,140 +36,140 @@
 		{% endif %}
 	{% endif %}
 
-	<h2>
-		{{ cour.title }}
-		{% if route=='editor' %}
-			<span class="badge badge-pill badge-{{stat}}" data-toggle="tooltip" title="Pourcentage de réussite du cours">{{succes}}</span>
-
-		{% endif %}
-	</h2>
-
-	<div class="metadata">
-		Ecrit le
-		{{cour.createdAt | date('d/m/Y')}}
-		à
-		{{cour.createdAt | date('H:i')}}
-		par
-		{{cour.createdBy}}</div>
-
 	<div>
-		{{cour.content | raw}}
-	</div>
-
-	<hr>
-
-</article>
-
-{% if is_granted('ROLE_EDITOR') %}
-	{% set route = "editor" %}
-{% else %}
-	{% set route = "profile"%}
-{% endif %}
-
-
-<table class="table table-hover">
-
-	<h3>Liste des exercices</h3>
-
-
-	{% if not cour.exercises is empty %}
-		{% if is_granted('ROLE_EDITOR') and app.user in cour.users %}
-			<thead>
-				<tr>
-					<th>Titre</th>
-					<th>Taux de reussite</th>
-					<th>Nombre de tentative</th>
-				</tr>
-			</thead>
-		{% endif %}
-	{% endif %}
-	<tbody>
-		{% for exercise in cour.exercises  %}
-
-			{% if is_granted('ROLE_EDITOR') and app.user in cour.users %}
-
-				{% set succes_rate = exercise.success_rate %}
-				{% if succes_rate == '/' %}
-					{% set status = "table-primary" %}
-				{% elseif succes_rate == 100  %}
-					{% set status = "table-success"%}
-				{% elseif succes_rate >= 50  %}
-					{% set status = "table-warning" %}
-				{% else %}
-					{% set status = "table-danger" %}
-				{% endif %}
-			{% else %}
-				{% if app.user.getNotation(exercise) == null %}
-					{% set status = "table-secondary" %}
-				{% elseif app.user.getNotation(exercise).getNote == 100 %}
-					{% set status = "table-success"%}
-				{% elseif app.user.getNotation(exercise).getNote >= 50 %}
-					{% set status = "table-warning" %}
-				{% else %}
-					{% set status = "table-danger" %}
-				{% endif %}
+		<h2>
+			{{ lesson.title }}
+			{% if not student %}
+				<span class="badge badge-pill badge-{{stat}}" data-toggle="tooltip" title="Pourcentage de réussite du lessons">{{succes}}</span>
 			{% endif %}
+		</h2>
+		<div class="metadata">
+			Ecrit le
+			{{lesson.createdAt | date('d/m/Y')}}
+			à
+			{{lesson.createdAt | date('H:i')}}
+			par
+			{{lesson.createdBy}}
+		</div>
+		<div>
+			{{lesson.content | raw}}
+		</div>
 
-			<tr class="{{status}}">
-				<td>
-					{% if app.user in cour.users %}
-						<a href="{{path(route ~'_show_exercises', {'id1' : cour.id, 'id2' : exercise.id})}}">
-							<div style="height:100%;width:100%">
-								{{exercise.title}}
-							</div>
-						</a>
+	</div><hr>
+
+	<table class="table table-hover">
+		<h3>Liste des exercices</h3>
+
+		{% if not lesson.exercises is empty %}
+			{% if not student and own %}
+				<thead>
+					<tr>
+						<th>Titre</th>
+						<th>Taux de reussite</th>
+						<th>Nombre de tentative</th>
+					</tr>
+				</thead>
+			{% endif %}
+		{% endif %}
+
+		<tbody>
+			{% for exercise in lesson.exercises  %}
+
+				{% if not student and own %}
+					{# Côté enseignant #}
+					{% set succes_rate = exercise.success_rate %}
+					{% if succes_rate == '/' %}
+						{% set status = "table-primary" %}
+					{% elseif succes_rate == 100  %}
+						{% set status = "table-success"%}
+					{% elseif succes_rate >= 50  %}
+						{% set status = "table-warning" %}
 					{% else %}
-						{{exercise.title}}
+						{% set status = "table-danger" %}
 					{% endif %}
-				</td>
-
-				{% if is_granted('ROLE_EDITOR') and app.user in cour.users %}
-					<td>{{exercise.success_rate}}</td>
-					<td>{{exercise.attempts}}</td>
+				{% else %}
+					{# Côté Etudiant #}
+					{% if app.user.getNotation(exercise) == null %}
+						{% set status = "table-secondary" %}
+					{% elseif app.user.getNotation(exercise).getNote == 100 %}
+						{% set status = "table-success"%}
+					{% elseif app.user.getNotation(exercise).getNote >= 50 %}
+						{% set status = "table-warning" %}
+					{% else %}
+						{% set status = "table-danger" %}
+					{% endif %}
 				{% endif %}
-			</tr>
-		</td>
-	</tbody>
-</tr>{% endfor %}</tbody></table>{% if is_granted('ROLE_EDITOR') and app.user in cour.users %}<nav class="navbar navbar-expand-lg "><div class="collapse navbar-collapse" id="navbarColor03">
 
-<ul class="navbar-nav mr-auto">
+				<tr class="{{status}}">
 
-	<li>
-		<a href="{{path('editor_edit_cours', {'id' : cour.id})}}" class="btn btn-primary">
-			Modifier le cours</a>
-	</li>
+					<td>
+						{% if own %}
+							{# Il faut être le créateur de l'exercice ou être inscrit pour accéder à l'exercice #}
+							<a href="{{path(route ~'_show_exercises', {'id1' : lesson.id, 'id2' : exercise.id})}}">
+								<div style="height:100%;width:100%">
+									{{exercise.title}}
+								</div>
+							</a>
+						{% else %}
+							{{exercise.title}}
+						{% endif %}
+					</td>
 
-</ul>
+					{% if not student and own %}
+						<td>{{exercise.success_rate}}</td>
+						<td>{{exercise.attempts}}</td>
+					{% endif %}
+				</tr>
 
-<ul class="navbar-nav ml-auto">
 
+			{% endfor %}
+		</tbody>
+	</table>
 
-	<li>
-		<a href="{{path('editor_create_exercise', {'id1' : cour.id})}}" class="btn btn-success">
-			Ajouter un exercice
-		</a>
-	</li>
+	{% if not student and own %}
+		<nav class="navbar navbar-expand-lg ">
+			<div class="collapse navbar-collapse" id="navbarColor03">
 
-</ul></div></nav>{% endif %}<nav class="navbar navbar-expand-lg "><div class="collapse navbar-collapse" id="navbarColor03"><ul class="navbar-nav mr-auto">
+				<ul class="navbar-nav mr-auto">
+					<li>
+						<a href="{{path('editor_edit_cours', {'id' : lesson.id})}}" class="btn btn-primary">Modifier le cours</a>
+					</li>
+				</ul>
 
-<li class="nav-item">
-	<a href="{{path('profile_my_lessons')}}" class="btn btn-primary">Retour</a>
-</li></ul><ul class="navbar-nav ml-auto">
+				<ul class="navbar-nav ml-auto">
+					<li>
+						<a href="{{path('editor_create_exercise', {'id1' : lesson.id})}}" class="btn btn-success">Ajouter un exercice</a>
+					</li>
+				</ul>
 
-{% if not is_granted('ROLE_EDITOR')%}
-
-	{% if app.user in cour.users %}
-
-		<li class="nav-item">
-			<a class="btn btn-danger" href="{{path('profile_unregisterLesson', {'id' : cour.id} )}}">Se désinscrire</a>
-		</li>
-
-	{% else %}
-
-		<li class="nav-item">
-			<a class="btn btn-success" href="{{path('profile_registerLesson', {'id' : cour.id} )}}">S'inscrire</a>
-		</li>
-
+			</div>
+		</nav>
 	{% endif %}
 
-{% endif %}</ul></div></nav>{% endblock %}
+	<nav class="navbar navbar-expand-lg ">
+		<div class="collapse navbar-collapse" id="navbarColor03">
+
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item">
+					<a href="{{path('profile_my_lessons')}}" class="btn btn-primary">Retour</a>
+				</li>
+			</ul>
+
+			<ul class="navbar-nav ml-auto">
+				{% if  route != "editor"%}
+					{% if own %}
+						<li class="nav-item">
+							<a class="btn btn-danger" href="{{path('profile_unregisterLesson', {'id' : lesson.id} )}}">Se désinscrire</a>
+						</li>
+					{% else %}
+						<li class="nav-item">
+							<a class="btn btn-success" href="{{path('profile_registerLesson', {'id' : lesson.id} )}}">S'inscrire</a>
+						</li>
+					{% endif %}
+				{% endif %}
+			</ul>
+
+		</div>
+	</nav>
+
+{% endblock %}

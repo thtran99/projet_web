@@ -38,7 +38,7 @@ class ProfileController extends AbstractController
         $cours = $repo->findBy([], ['createdAt' => 'desc']);
 
         return $this->render('profile/cours.html.twig', [
-            "cours" => $cours
+            "lessons" => $cours
         ]);
     }
 
@@ -49,7 +49,7 @@ class ProfileController extends AbstractController
     public function show_cours(Cours $cour)
     {
         return $this->render('profile/showCours.html.twig', [
-            "cour" => $cour
+            "lesson" => $cour
         ]);
     }
 

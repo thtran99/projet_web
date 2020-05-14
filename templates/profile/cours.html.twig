@@ -5,11 +5,11 @@
 
 {% block body %}
 
-	{% for cour in cours %}
+	{% for lesson in lessons %}
 		<h3>
-			<a href="{{path('profile_show_cours', {'id' : cour.id})}}">
-				{{cour.title }}
-				{% if cour in app.user.lessons %}
+			<a href="{{path('profile_show_cours', {'id' : lesson.id})}}">
+				{{lesson.title }}
+				{% if lesson in app.user.lessons %}
 					{% if is_granted('ROLE_EDITOR')%}
 						{% set status = 'success' %}
 						{% set msg = 'Crée' %}
@@ -23,11 +23,11 @@
 		</h3>
 		<div class="metadata">
 			Ecrit le
-			{{cour.createdAt | date('d/m/Y')}}
+			{{lesson.createdAt | date('d/m/Y')}}
 			à
-			{{cour.createdAt | date('H:i')}}
+			{{lesson.createdAt | date('H:i')}}
 			par
-			{{cour.createdBy}}
+			{{lesson.createdBy}}
 		</div>
 		<hr>
 	{% endfor %}
