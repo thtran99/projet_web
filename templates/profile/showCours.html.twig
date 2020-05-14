@@ -76,7 +76,7 @@
 			{% for exercise in lesson.exercises  %}
 
 				{% if not student and own %}
-					{# Côté enseignant #}
+					{# Côté enseignant qui a crée le cours#}
 					{% set succes_rate = exercise.success_rate %}
 					{% if succes_rate == '/' %}
 						{% set status = "table-primary" %}

@@ -5,13 +5,18 @@
 
 {% block body %}
 
+	{% set user = app.user %}
+
 	{% if is_granted('ROLE_EDITOR') %}
 		{% set route = "editor" %}
+		{% set student = false %}
 	{% else %}
 		{% set route = "profile"%}
+		{% set student = true %}
 	{% endif %}
 
-	{% if app.user.lessons is empty %}
+
+	{% if user.lessons is empty %}
 
 		<div>
 			{% if route == 'editor' %}
@@ -23,11 +28,11 @@
 
 	{% else %}
 
-		{% for lesson in app.user.lessons %}
+		{% for lesson in user.lessons %}
 			<table class="table table-hover 1">
 				<tbody>
 
-					{% if route=='editor' %}
+					{% if not student %}
 						{% set succes = lesson.success_rate %}
 						{% if succes == '/' %}
 							{% set stat = "secondary" %}
@@ -44,9 +49,8 @@
 						<a href="{{path('profile_show_cours', {'id' : lesson.id})}}">
 							<div style="height:100%;width:100%">
 								<h3>{{lesson.title}}
-									{% if route=='editor' %}
+									{% if not student %}
 										<span class="badge badge-pill badge-{{stat}}" data-toggle="tooltip" title="Pourcentage de réussite du cours">{{succes}}</span>
-
 									{% endif %}
 								</h3>
 							</div>
@@ -61,7 +65,7 @@
 				<thead>
 					<tr>
 						<th>Exercice</th>
-						{% if route=='editor' %}
+						{% if not student %}
 							<th>Taux de réussite</th>
 							<th>Nombre de tentative</th>
 						{% else %}
@@ -73,7 +77,7 @@
 				<tbody class="exercises">
 					{% for exercise in lesson.exercises %}
 
-						{% if route=='editor' %}
+						{% if not student %}
 							{% set succes_rate = exercise.success_rate %}
 							{% if succes_rate == '/' %}
 								{% set status = "table-secondary" %}
@@ -85,7 +89,7 @@
 								{% set status = "table-danger" %}
 							{% endif %}
 						{% else %}
-							{% set notation = app.user.getNotation(exercise) %}
+							{% set notation = user.getNotation(exercise) %}
 							{% if notation == null %}
 								{% set status = "table-secondary" %}
 								{% set note = '/' %}
@@ -109,7 +113,7 @@
 								</a>
 							</td>
 
-							{% if route=='editor' %}
+							{% if not student %}
 								<td>{{exercise.success_rate}}</td>
 								<td>{{exercise.attempts}}</td>
 							{% else %}

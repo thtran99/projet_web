@@ -6,14 +6,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 
-use App\Repository\CoursRepository;
-use App\Repository\ExerciseRepository;
-use App\Repository\NotationRepository;
 use App\Entity\Cours;
 use App\Entity\Line;
 use App\Entity\LinesTask;
 use App\Entity\Notation;
 use App\Form\StudentLinesTaskType;
+use App\Repository\CoursRepository;
+use App\Repository\ExerciseRepository;
 
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -59,25 +58,18 @@ class ProfileController extends AbstractController
      */
     public function registerLesson($id, Cours $cour, EntityManagerInterface $manager)
     {
-
         if (!$this->isGranted('ROLE_EDITOR')) {
-
             $user = $this->getUser();
-
             $cour->addUser($user);
-
             $manager->flush();
-
             return $this->redirectToRoute("profile_show_cours", [
                 'id' => $id
             ]);
         }
-
         return $this->redirectToRoute("profile_show_cours", [
             'id' => $id
         ]);
     }
-
 
     /**
      * @Route("/cours/{id}/desinscription", name="unregisterLesson",
@@ -85,20 +77,14 @@ class ProfileController extends AbstractController
      */
     public function unregisterLesson($id, Cours $cour, EntityManagerInterface $manager)
     {
-
         if (!$this->isGranted('ROLE_EDITOR')) {
-
             $user = $this->getUser();
-
             $cour->removeUser($user);
-
             $manager->flush();
-
             return $this->redirectToRoute("profile_show_cours", [
                 'id' => $id
             ]);
         }
-
         return $this->redirectToRoute("profile_show_cours", [
             'id' => $id
         ]);
@@ -128,8 +114,6 @@ class ProfileController extends AbstractController
         }
 
         $succes = $notation->getNote() == 100;
-
-
         for ($i = 0; $i < $exercise->getnbLines(); $i++) {
             $line = new Line();
             $line->setRanking($i);
@@ -137,14 +121,10 @@ class ProfileController extends AbstractController
         }
 
         $form = $this->createForm(StudentLinesTaskType::class, $task);
-
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
-
             $error_content = []; // erreur lié aux lignes
             $error_indent = []; // erreur lié aux indentation
-
             $good_line = 0;
             $note = 0;
 
@@ -162,7 +142,6 @@ class ProfileController extends AbstractController
             }
 
             $exercise->addAttemps();
-
             /* On attribue la note en pourcentage */
             $note =  $good_line * 100 / $exercise->getnbLines();
             $notation->setNote($note);
@@ -173,7 +152,6 @@ class ProfileController extends AbstractController
             if ($note == 100) {
                 $succes = true;
             }
-
             return $this->render('profile/showExercise.html.twig', [
                 'note' => $note,
                 'succes' => $succes,
@@ -186,7 +164,6 @@ class ProfileController extends AbstractController
                 'id2' => $id2
             ]);
         }
-
         return $this->render('profile/showExercise.html.twig', [
             'note' => $notation->getNote(),
             'succes' => $succes,
