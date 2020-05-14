@@ -211,7 +211,7 @@ class Exercise
     {
         $total = $this->notations->count();
         if ($total == 0) {
-            return 'NOT DEFINED';
+            return '/';
         }
 
         $success = 0;

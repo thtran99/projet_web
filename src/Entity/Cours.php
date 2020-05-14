@@ -182,13 +182,13 @@ class Cours
     {
         $total = $this->exercises->count();
         if ($total == 0) {
-            return 'NOT DEFINED';
+            return '/';
         }
 
         $success = 0;
         foreach ($this->exercises as $exercise) {
             $exo_rate = $exercise->success_rate();
-            if ($exo_rate != 'NOT DEFINED') {
+            if ($exo_rate != '/') {
                 $success += $exo_rate;
             } else {
                 $total--;
@@ -196,7 +196,7 @@ class Cours
         }
 
         if ($total == 0) {
-            return 'NOT DEFINED';
+            return '/';
         }
 
         return $success  / $total;

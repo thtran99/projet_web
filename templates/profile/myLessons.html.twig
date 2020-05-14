@@ -28,7 +28,7 @@
 				<tbody>
 					{% if route=='editor' %}
 						{% set succes = lesson.success_rate %}
-						{% if succes == 'NOT DEFINED' %}
+						{% if succes == '/' %}
 							{% set stat = "secondary" %}
 						{% elseif succes == 100  %}
 							{% set stat = "success"%}
@@ -44,7 +44,8 @@
 							<div style="height:100%;width:100%">
 								<h3>{{lesson.title}}
 									{% if route=='editor' %}
-										<span class="badge badge-pill badge-{{stat}}">{{succes}}</span>
+										<span class="badge badge-pill badge-{{stat}}" data-toggle="tooltip" title="Pourcentage de réussite du cours">{{succes}}</span>
+
 									{% endif %}
 								</h3>
 							</div>
@@ -71,7 +72,7 @@
 					{% for exercise in lesson.exercises %}
 						{% if route=='editor' %}
 							{% set succes_rate = exercise.success_rate %}
-							{% if succes_rate == 'NOT DEFINED' %}
+							{% if succes_rate == '/' %}
 								{% set status = "table-secondary" %}
 							{% elseif succes_rate == 100  %}
 								{% set status = "table-success"%}

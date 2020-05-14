@@ -4,9 +4,35 @@
 {% endblock %}
 
 {% block body %}
+
+{% if is_granted('ROLE_EDITOR') %}
+	{% set route = "editor" %}
+{% else %}
+	{% set route = "profile"%}
+{% endif %}
+
 <article>
+	{% if route=='editor' %}
+		{% set succes = cour.success_rate %}
+		{% if succes == '/' %}
+			{% set stat = "secondary" %}
+		{% elseif succes == 100  %}
+			{% set stat = "success"%}
+		{% elseif succes >= 50  %}
+			{% set stat = "warning" %}
+		{% else %}
+			{% set stat = "danger" %}
+		{% endif %}
+	{% endif %}
+
 	<h2>
-		{{ cour.title }}</h2>
+		{{ cour.title }}
+		{% if route=='editor' %}
+			<span class="badge badge-pill badge-{{stat}}" data-toggle="tooltip" title="Pourcentage de réussite du cours">{{succes}}</span>
+
+		{% endif %}
+	</h2>
+
 	<div class="metadata">
 		Ecrit le
 		{{cour.createdAt | date('d/m/Y')}}
@@ -52,7 +78,7 @@
 			{% if is_granted('ROLE_EDITOR') and app.user in cour.users %}
 
 				{% set succes_rate = exercise.success_rate %}
-				{% if succes_rate == 'NOT DEFINED' %}
+				{% if succes_rate == '/' %}
 					{% set status = "table-primary" %}
 				{% elseif succes_rate == 100  %}
 					{% set status = "table-success"%}
