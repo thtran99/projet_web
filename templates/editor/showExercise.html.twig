@@ -7,94 +7,72 @@
 
 {% block body %}
 
-	<article>
+	<div>
 		<h2>{{ exercise.title }}</h2>
+		<p>{{exercise.description}}</p>
+	</div>
 
-		<div class="group"></div>
+	<table id="lines" class="table table-striped">
 
-		<p>
-			{{exercise.description}}
-		</p>
+		<thead>
+			<tr>
+				<th>Rang</th>
+				<th>Indentation</th>
+				<th>Contenu</th>
+			</tr>
+		</thead>
 
+		{% for line in exercise.lignes %}
+			<tbody>
+				<tr>
+					<td>{{ line.ranking }}</td>
+					<td>{{ line.indentation }}</td>
+					<td>{{ line.content }}</td>
+				</tr>
+			</tbody>
+		{% endfor %}
 
-		<table id="lines" class="table table-striped">
+	</table>
+
+	<div>
+		<table class="table table-striped">
+
 			<thead>
 				<tr>
-					<th>Rang</th>
-					<th>Indentation</th>
-					<th>Contenu</th>
+					<th>Etudiant</th>
+					<th>Note</th>
 				</tr>
 			</thead>
 
-			{% for line in exercise.lignes %}
-
+			{% for notation in exercise.notations %}
 				<tbody>
 					<tr>
-						<td>
-							{{ line.ranking }}
-						</td>
-						<td>
-							{{ line.indentation }}
-						</td>
-
-						<td>
-							{{ line.content }}
-						</td>
+						<td>{{notation.student.username}}</td>
+						<td>{{notation.note}}</td>
 					</tr>
 				</tbody>
-
 			{% endfor %}
-
 		</table>
+	</div><hr>
 
-		<div>
-			<table class="table table-striped">
-				<thead>
-					<tr>
-						<th>Etudiant</th>
-						<th>Note</th>
-					</tr>
-				</thead>
+	<nav class="navbar navbar-expand-lg ">
+		<div class="collapse navbar-collapse" id="navbarColor04">
 
-				{% for notation in exercise.notations %}
-					<tbody>
-						<tr>
-							<td>
-								{{notation.student.username}}
-							</td>
-							<td>
-								{{notation.note}}</td>
-						</tr>
-					</tbody>
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item">
+					<a href="{{path('profile_show_cours', {'id' : exercise.cours.id})}}" class="btn btn-primary">Retour</a>
+				</li>
+			</ul>
 
-				{% endfor %}
-			</table>
-		</div>
-
-		<hr>
-
-		<nav class="navbar navbar-expand-lg ">
-			<div class="collapse navbar-collapse" id="navbarColor04">
-
-				<ul class="navbar-nav mr-auto">
+			{% if app.user.my_exercise(exercise)%}
+				<ul class="navbar-nav ml-auto">
 					<li class="nav-item">
-						<a href="{{path('profile_show_cours', {'id' : exercise.cours.id})}}" class="btn btn-primary">Retour</a>
+						<a class="btn btn-primary" href="{{path('editor_edit_exercise', {'id1': id1, 'id2': id2}) }}">Modifier l'exercice</a>
 					</li>
 				</ul>
+			{% endif %}
 
-
-				{% if app.user.my_exercise(exercise)%}
-					<ul class="navbar-nav ml-auto">
-						<li class="nav-item">
-							<a class="btn btn-primary" href="{{path('editor_edit_exercise', {'id1': id1, 'id2': id2}) }}">Modifier l'exercice</a>
-						</li>
-					</ul>
-				{% endif %}
-
-			</div>
-		</nav>
-
-
-	</article>
+		</div>
+	</nav>
 
 {% endblock %}

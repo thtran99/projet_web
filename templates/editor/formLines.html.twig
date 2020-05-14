@@ -4,78 +4,70 @@
 	{% if editMode %}
 		Creation exercice
 	{% else %}
-		Modification exercice
+		Modification
+		{{exercise.title}}
 	{% endif %}
 {% endblock %}
 
 {% block body %}
-	<article>
-		{% if editMode %}
-			<h1>Creation du contenue de l'exercice</h1>
-		{% else %}
-			<h1>Modification du contenue de l'exercice</h1>
-		{% endif %}
+
+	{% if editMode %}
+		<h1>Creation du contenue de
+			{{exercice.title}}</h1>
+	{% else %}
+		<h1>Modification du contenue de
+			{{exercice.title}}</h1>
+	{% endif %}
 
 
-		<table id="lines" class="table table-striped">
-			<thead>
+	<table id="lines" class="table table-striped">
+
+		<thead>
+			<tr>
+				<th>Rang</th>
+				<th>Indentation</th>
+				<th>Contenu</th>
+			</tr>
+		</thead>
+
+		{{ form_start(form)}}
+
+		{% for line in form.lines %}
+			<tbody>
 				<tr>
-					<th>Rang</th>
-					<th>Indentation</th>
-					<th>Contenu</th>
+					<td>{{ loop.index0 }}</td>
+					<td>{{ form_widget(line.indentation) }}</td>
+					<td>{{ form_widget(line.content, {'attr' : { 'placeholder' : 'Ecrivez une ligne de code'}}) }}
+					</td>
 				</tr>
-			</thead>
+			</tbody>
+		{% endfor %}
 
-			{{ form_start(form)}}
+	</table>
 
+	<nav class="navbar navbar-expand-lg ">
+		<div class="collapse navbar-collapse" id="navbarColor04">
 
-			{% for line in form.lines %}
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item">
+					<a class="btn btn-primary" href="{{path('editor_edit_exercise', {'id1': id1, 'id2': id2}) }}">Retour</a>
+				</li>
+			</ul>
 
-				<tbody>
-					<tr>
-						<td>
-							{{ loop.index0 }}
-						</td>
-						<td>
-							{{ form_widget(line.indentation) }}
-						</td>
+			<ul class="navbar-nav ml-auto">
+				<li class="nav-item">
+					<button type="submit" class="btn btn-success">
+						{% if editMode %}
+							Creer
+						{% else %}
+							Enregistrer les modifications
+						{% endif %}
+					</button>
+				</li>
+			</ul>
 
-						<td>
-							{{ form_widget(line.content, {'attr' : { 'placeholder' : 'Ecrivez une ligne de code'}}
-							) }}
-						</td>
-					</tr>
-				</tbody>
-			{% endfor %}
-
-		</table>
-
-
-		<nav class="navbar navbar-expand-lg ">
-			<div class="collapse navbar-collapse" id="navbarColor04">
-
-				<ul class="navbar-nav mr-auto">
-					<li class="nav-item">
-						<a class="btn btn-primary" href="{{path('editor_edit_exercise', {'id1': id1, 'id2': id2}) }}">Retour</a>
-					</li>
-				</ul>
-
-				<ul class="navbar-nav ml-auto">
-					<li class="nav-item">
-						<button type="submit" class="btn btn-success">
-							{% if editMode %}
-								Creer
-							{% else %}
-								Enregistrer les modifications
-							{% endif %}
-						</button>
-					</li>
-				</ul>
-
-			</div>
-		</nav>
-		{{ form_end(form) }}
-
-	</article>
+		</div>
+	</nav>
+	{{ form_end(form) }}
 
 {% endblock %}

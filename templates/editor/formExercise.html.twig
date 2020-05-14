@@ -5,7 +5,8 @@
 
 {% block title %}
 	{% if editMode %}
-		Modification de l'exercice
+		Modification de
+		{{exercise.title}}
 	{% else %}
 		Création d'un exercice
 	{% endif %}
@@ -14,13 +15,10 @@
 {% block body%}
 
 	{% if editMode %}
-		<h1>
-			Modification de l'exercice
-		</h1>
+		<h1>Modification de
+			{{exercise.title}}</h1>
 	{% else %}
-		<h1>
-			Création d'un exercice
-		</h1>
+		<h1>Création d'un exercice</h1>
 	{% endif %}
 
 	{{ form_start(form)}}
