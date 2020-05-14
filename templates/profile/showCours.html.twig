@@ -36,7 +36,7 @@
 
 
 	{% if not cour.exercises is empty %}
-		{% if is_granted('ROLE_EDITOR') %}
+		{% if is_granted('ROLE_EDITOR') and app.user in cour.users %}
 			<thead>
 				<tr>
 					<th>Titre</th>
@@ -49,7 +49,8 @@
 	<tbody>
 		{% for exercise in cour.exercises  %}
 
-			{% if is_granted('ROLE_EDITOR') %}
+			{% if is_granted('ROLE_EDITOR') and app.user in cour.users %}
+
 				{% set succes_rate = exercise.success_rate %}
 				{% if succes_rate == 'NOT DEFINED' %}
 					{% set status = "table-primary" %}
@@ -85,7 +86,7 @@
 					{% endif %}
 				</td>
 
-				{% if is_granted('ROLE_EDITOR') %}
+				{% if is_granted('ROLE_EDITOR') and app.user in cour.users %}
 					<td>{{exercise.success_rate}}</td>
 					<td>{{exercise.attempts}}</td>
 				{% endif %}
@@ -115,25 +116,23 @@
 </ul></div></nav>{% endif %}<nav class="navbar navbar-expand-lg "><div class="collapse navbar-collapse" id="navbarColor03"><ul class="navbar-nav mr-auto">
 
 <li class="nav-item">
-	<a href="{{path('profile_cours')}}" class="btn btn-primary">Retour</a>
+	<a href="{{path('profile_my_lessons')}}" class="btn btn-primary">Retour</a>
 </li></ul><ul class="navbar-nav ml-auto">
 
-{% if is_granted('ROLE_EDITOR')%}
+{% if not is_granted('ROLE_EDITOR')%}
+
+	{% if app.user in cour.users %}
+
+		<li class="nav-item">
+			<a class="btn btn-danger" href="{{path('profile_unregisterLesson', {'id' : cour.id} )}}">Se désinscrire</a>
+		</li>
 
 	{% else %}
 
-		{% if app.user in cour.users %}
+		<li class="nav-item">
+			<a class="btn btn-success" href="{{path('profile_registerLesson', {'id' : cour.id} )}}">S'inscrire</a>
+		</li>
 
-			<li class="nav-item">
-				<a class="btn btn-danger" href="{{path('profile_unregisterLesson', {'id' : cour.id} )}}">Se désinscrire</a>
-			</li>
-
-		{% else %}
-
-			<li class="nav-item">
-				<a class="btn btn-success" href="{{path('profile_registerLesson', {'id' : cour.id} )}}">S'inscrire</a>
-			</li>
-
-		{% endif %}
+	{% endif %}
 
 {% endif %}</ul></div></nav>{% endblock %}
