@@ -4,38 +4,32 @@
 {% endblock %}
 
 {% block body %}
-	<section class="cours">
 
-		{% for cour in cours %}
-			<article>
-				<h3>
-					<a href="{{path('profile_show_cours', {'id' : cour.id})}}">
-						{{cour.title }}
-						{% if cour in app.user.lessons %}
-							{% if is_granted('ROLE_EDITOR')%}
-								<span class="badge badge-pill badge-success">
-									CREER
-								</span>
-							{% else %}
-								<span class="badge badge-pill badge-info">
-									Inscrit
-								</span>
-							{% endif %}
-						{% endif %}
-					</a>
-				</h3>
-				<div class="metadata">
-					Ecrit le
-					{{cour.createdAt | date('d/m/Y')}}
-					à
-					{{cour.createdAt | date('H:i')}}
-					par
-					{{cour.createdBy}}</div>
-				<hr>
-			{% endfor %}
-		</article>
-
-	</section>
-
+	{% for cour in cours %}
+		<h3>
+			<a href="{{path('profile_show_cours', {'id' : cour.id})}}">
+				{{cour.title }}
+				{% if cour in app.user.lessons %}
+					{% if is_granted('ROLE_EDITOR')%}
+						{% set status = 'success' %}
+						{% set msg = 'Crée' %}
+					{% else %}
+						{% set status = 'info' %}
+						{% set msg = 'Inscrit' %}
+					{% endif %}
+					<span class="badge badge-pill badge-{{status}}">{{msg}}</span>
+				{% endif %}
+			</a>
+		</h3>
+		<div class="metadata">
+			Ecrit le
+			{{cour.createdAt | date('d/m/Y')}}
+			à
+			{{cour.createdAt | date('H:i')}}
+			par
+			{{cour.createdBy}}
+		</div>
+		<hr>
+	{% endfor %}
 
 {% endblock %}
