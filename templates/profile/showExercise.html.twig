@@ -18,7 +18,10 @@
 
 		<hr>
 		<div class="enonce-general">
-			<label> <ins>A remettre dans le bon ordre avec la bonne indentation </ins></label>
+			<label>
+				<ins>A remettre dans le bon ordre avec la bonne indentation
+				</ins>
+			</label>
 			<ul>
 				{% for line in random_lignes %}
 					<li>{{ line.content }}</li>
@@ -26,13 +29,25 @@
 			</ul>
 		</div>
 
+		{% if note == 100  %}
+			{% set stat = "success"%}
+		{% elseif note >= 50  %}
+			{% set stat = "warning" %}
+		{% else %}
+			{% set stat = "danger" %}
+		{% endif %}
+
 		<div class="progress">
-  		<div class="progress-bar bg-success" role="progressbar" style="width: {{note}}%"></div>
+			<div class="progress-bar bg-{{stat}}" role="progressbar" style="width: {{note}}%" aria-valuenow="{{note}}">{{note}}
+				/ 100</div>
+
 		</div>
-		
+
 
 		{% if succes %}
-			<div class="succes"> <h2>Bravo, vous avez validé l'exercice !</h2></div>
+			<div class="succes">
+				<h2>Bravo, vous avez validé l'exercice !</h2>
+			</div>
 		{% else %}
 
 			<div class="errors">
@@ -118,4 +133,3 @@
 
 	</article>
 {% endblock %}
-
