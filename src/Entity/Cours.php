@@ -178,7 +178,7 @@ class Cours
         return $this;
     }
 
-    public function success_rate()
+    public function average_rate()
     {
         $total = $this->exercises->count();
         if ($total == 0) {
@@ -187,7 +187,7 @@ class Cours
 
         $success = 0;
         foreach ($this->exercises as $exercise) {
-            $exo_rate = $exercise->success_rate();
+            $exo_rate = $exercise->average_rate();
             if ($exo_rate != '/') {
                 $success += $exo_rate;
             } else {

@@ -61,8 +61,8 @@ class AppFixtures extends Fixture
                     ->setDescription($faker->paragraph(2))
                     ->setAttempts(mt_rand(1, 10));
 
-                $lesson->addExercise($exercise);
                 $manager->persist($exercise);
+                $lesson->addExercise($exercise);
 
                 $notation = new Notation();
                 $notation
@@ -78,8 +78,8 @@ class AppFixtures extends Fixture
                         ->setContent($faker->sentence(mt_rand(4, 8)))
                         ->setIndentation(mt_rand(0, 2));
 
-                    $exercise->addLigne($line);
                     $manager->persist($line);
+                    $exercise->addLigne($line);
                 }
                 $exercise->setnbLines($rand);
             }

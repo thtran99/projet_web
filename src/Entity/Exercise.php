@@ -195,20 +195,18 @@ class Exercise
         return $this;
     }
 
-    public function success_rate()
+    public function average_rate()
     {
         $total = $this->notations->count();
         if ($total == 0) {
             return '/';
         }
 
-        $success = 0;
+        $somme = 0;
         foreach ($this->notations as $notation) {
-            if ($notation->getNote() == 100) {
-                $success++;
-            }
+            $somme += $notation->getNote();
         }
 
-        return ($success * 100) / $total;
+        return $somme / $total;
     }
 }

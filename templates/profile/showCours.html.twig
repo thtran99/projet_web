@@ -24,7 +24,7 @@
 	{% endif %}
 
 	{% if not student %}
-		{% set succes = lesson.success_rate %}
+		{% set succes = lesson.average_rate %}
 		{% if succes == '/' %}
 			{% set stat = "secondary" %}
 		{% elseif succes == 100  %}
@@ -77,7 +77,7 @@
 
 				{% if not student and own %}
 					{# Côté enseignant qui a crée le cours#}
-					{% set succes_rate = exercise.success_rate %}
+					{% set succes_rate = exercise.average_rate %}
 					{% if succes_rate == '/' %}
 						{% set status = "table-primary" %}
 					{% elseif succes_rate == 100  %}
@@ -116,7 +116,7 @@
 					</td>
 
 					{% if not student and own %}
-						<td>{{exercise.success_rate}}</td>
+						<td>{{exercise.average_rate}}</td>
 						<td>{{exercise.attempts}}</td>
 					{% endif %}
 				</tr>
@@ -126,44 +126,45 @@
 		</tbody>
 	</table>
 
-	{% if not student and own %}
-		<nav class="navbar navbar-expand-lg ">
-			<div class="collapse navbar-collapse" id="navbarColor03">
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
 
-				<ul class="navbar-nav mr-auto">
-					<li>
-						<a href="{{path('editor_edit_cours', {'id' : lesson.id})}}" class="btn btn-primary">Modifier le cours</a>
-					</li>
-				</ul>
 
-				<ul class="navbar-nav ml-auto">
-					<li>
-						<a href="{{path('editor_create_exercise', {'id1' : lesson.id})}}" class="btn btn-success">Ajouter un exercice</a>
-					</li>
-				</ul>
-
-			</div>
-		</nav>
-	{% endif %}
-
-	<nav class="navbar navbar-expand-lg ">
-		<div class="collapse navbar-collapse" id="navbarColor03">
-
+		<div class="navbar-collapse collapse" id="navbarColor03" style="">
 			<ul class="navbar-nav mr-auto">
 				<li class="nav-item">
-					<a href="{{path('profile_my_lessons')}}" class="btn btn-primary">Retour</a>
+					<a href="{{path('profile_my_lessons')}}" class="nav-link">Retour</a>
+
 				</li>
+
+				{% if not student and own %}
+					<li>
+						<a href="{{path('editor_edit_cours', {'id' : lesson.id})}}" class="nav-link">Modifier le cours</a>
+
+					</li>
+				{% endif %}
 			</ul>
 
 			<ul class="navbar-nav ml-auto">
-				{% if  route != "editor"%}
+				{% if not student and own %}
+					<li>
+						<a href="{{path('editor_create_exercise', {'id1' : lesson.id})}}" class="nav-link">Ajouter un exercice</a>
+
+					</li>
+				{% endif %}
+
+				{% if  student%}
 					{% if own %}
 						<li class="nav-item">
-							<a class="btn btn-danger" href="{{path('profile_unregisterLesson', {'id' : lesson.id} )}}">Se désinscrire</a>
+							<a class="nav-link" href="{{path('profile_unregisterLesson', {'id' : lesson.id} )}}">Se désinscrire</a>
+
 						</li>
 					{% else %}
 						<li class="nav-item">
-							<a class="btn btn-success" href="{{path('profile_registerLesson', {'id' : lesson.id} )}}">S'inscrire</a>
+							<a class="nav-link" href="{{path('profile_registerLesson', {'id' : lesson.id} )}}">S'inscrire</a>
+
 						</li>
 					{% endif %}
 				{% endif %}
@@ -171,5 +172,4 @@
 
 		</div>
 	</nav>
-
 {% endblock %}

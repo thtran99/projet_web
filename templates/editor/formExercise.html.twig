@@ -29,12 +29,16 @@
 
 	{{ form_row(form.nbLines, {'label':'Nombre de lignes', 'attr' : { 'placeholder' : 'Nombre entre 1 et 100'}}) }}
 
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
 
-	<nav class="navbar navbar-expand-lg ">
-		<div class="collapse navbar-collapse" id="navbarColor04">
+
+		<div class="navbar-collapse collapse" id="navbarColor03" style="">
 			<ul class="navbar-nav ml-auto">
 				<li class="nav-item">
-					<button type="submit" class="btn btn-success">
+					<button type="submit" class="btn btn-primary">
 						Suivant
 					</button>
 				</li>
@@ -43,6 +47,5 @@
 	</nav>
 
 	{{ form_end(form) }}
-
 
 {% endblock %}
