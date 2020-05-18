@@ -2,7 +2,6 @@
 
 namespace App\DataFixtures;
 
-use App\Controller\SecurityController;
 use App\Entity\Cours;
 use App\Entity\Exercise;
 use App\Entity\Line;
