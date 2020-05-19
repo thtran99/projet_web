@@ -23,16 +23,16 @@
 			</ul>
 		</div>
 
-		{% if note == 100  %}
+		{% if note >= 80  %}
 			{% set stat = "success"%}
-		{% elseif note >= 50  %}
+		{% elseif note >= 40  %}
 			{% set stat = "warning" %}
 		{% else %}
 			{% set stat = "danger" %}
 		{% endif %}
 
 		<div class="progress">
-			<div class="progress-bar bg-{{stat}}" role="progressbar" style="width: {{note}}%" aria-valuenow="{{note}}">{{note}}/ 100</div>
+			<div class="progress-bar bg-{{stat}}" role="progressbar" style="width: {{note}}%" aria-valuenow="{{note}}">{{note}}/100</div>
 		</div>
 
 		{% if succes %}
@@ -40,7 +40,6 @@
 				<h2>Bravo, vous avez validé l'exercice !</h2>
 			</div>
 		{% else %}
-
 			<div class="errors">
 				{% if not error_content is empty%}<hr>
 					<div class="content">
@@ -51,9 +50,10 @@
 								<li>{{error}}</li>
 							{% endfor %}
 						</ul>
+					</div>
 
-					{% endif %}
-				</div>
+				{% endif %}
+
 
 				{% if not error_indent is empty%}
 					<div class="indent">
@@ -68,7 +68,6 @@
 					</div>
 				{% endif %}
 			</div>
-
 		{% endif %}
 
 
@@ -96,19 +95,24 @@
 
 		</table>
 
-		<nav class="navbar navbar-expand-lg ">
-			<div class="collapse navbar-collapse" id="navbarColor04">
+		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+			<button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+
+
+			<div class="navbar-collapse collapse" id="navbarColor03" style="">
 
 				<ul class="navbar-nav mr-auto">
 					<li class="nav-item">
-						<a href="{{path('profile_show_cours', {'id' : exercise.cours.id})}}" class="btn btn-primary">Retour</a>
+						<a href="{{path('profile_show_cours', {'id' : exercise.cours.id})}}" class="nav-link">Retour</a>
 					</li>
 				</ul>
 
 				{%  if not is_granted('ROLE_EDITOR') %}
 					<ul class="navbar-nav ml-auto">
 						<li class="nav-item">
-							<button id="submit" type="submit" class="btn btn-success">
+							<button id="submit" type="submit" class="btn btn-primary">
 								Valider
 							</button>
 						</li>
@@ -116,10 +120,8 @@
 				{% endif %}
 
 				{{ form_end(form) }}
-
 			</div>
 		</nav>
+
 	</article>
-
-
 {% endblock %}

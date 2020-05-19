@@ -4,7 +4,8 @@ Bienvenu sur La nouvelle plateforme d'apprentissage en ligne ZOOM ZOOM qui détr
   
 ## Lancement du projet
   Une fois l'archive décompresser, il faut lancer le serveur WAMP sur Windows ou LAMP sur Linux. Dans le dossier, ouvrir un terminal et éxécuter : 
-  * Pour créer la base de données :  php bin/console doctrine:migrations:migrate 
+  * Pour créer la base de données : php bin/console doctrine:database:create
+  * Pour créer les tables :  php bin/console doctrine:migrations:migrate 
   * Pour créer de fausses données : php bin/console doctrine:fixtures:load
   * Pour lancer le serveur : symfony server:start
   
