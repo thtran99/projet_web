@@ -95,9 +95,9 @@
 								{% set note = '/' %}
 							{% else %}
 								{% set note = notation.note %}
-								{% if note == 100 %}
+								{% if note >= 80 %}
 									{% set status = "table-success"%}
-								{% elseif note >= 50 %}
+								{% elseif note >= 40 %}
 									{% set status = "table-warning" %}
 								{% else %}
 									{% set status = "table-danger" %}
