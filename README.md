@@ -66,8 +66,8 @@ Nous avons créé de fausses données dont deux utilisateurs :
     * [Etudiant] : Permet de s'inscrire, désinscrire au cours et d'accéder aux différents exercices
 
   * localhost:8000/editor/cours/{idCours}/exercice/{idExercice} : Accéde à la page d'un exercice. 
-    * [Enseignant] : Affiche la correction et la note des étudiants inscrits
-    * [Etudiant] : Affiche la page de résolution de l'exercice -> Les lignes du code sont affichés dans un ordre aléatoire. L'étudiant doit remettre les lignes le bon ordre avec la bonne indentation.
+    * [Enseignant] : Correction et la note des étudiants inscrits
+    * [Etudiant] : Résoudre un exercice -> Les lignes du code sont affichés dans un ordre aléatoire. L'étudiant doit remettre les lignes dans le bon ordre avec la bonne indentation.
 
   * localhost:8000/editor/cours/{idCours}/exercice/new : 
   [Spécifique aux enseignants] : Création d'un exercice -> entrer un titre, un enoncé et un nombre de ligne correspondant aux nombres de ligne total de votre exercice. Cliquer sur suivant.

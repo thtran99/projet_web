@@ -69,7 +69,19 @@
 						<th>Nombre de tentative</th>
 					</tr>
 				</thead>
+
+			{% else %}
+				{% if student and own %}
+					<thead>
+						<tr>
+							<th>Titre</th>
+							<th>Notes</th>
+						</tr>
+					</thead>
+				{% endif %}
+
 			{% endif %}
+
 		{% endif %}
 
 		<tbody>
@@ -89,16 +101,24 @@
 					{% endif %}
 				{% else %}
 					{# Côté Etudiant #}
-					{% if app.user.getNotation(exercise) == null %}
+
+
+					{% set notation = user.getNotation(exercise) %}
+					{% if notation == null %}
 						{% set status = "table-secondary" %}
-					{% elseif app.user.getNotation(exercise).getNote == 100 %}
-						{% set status = "table-success"%}
-					{% elseif app.user.getNotation(exercise).getNote >= 50 %}
-						{% set status = "table-warning" %}
+						{% set note = '/' %}
 					{% else %}
-						{% set status = "table-danger" %}
+						{% set note = notation.note %}
+						{% if note >= 80 %}
+							{% set status = "table-success"%}
+						{% elseif note >= 40 %}
+							{% set status = "table-warning" %}
+						{% else %}
+							{% set status = "table-danger" %}
+						{% endif %}
 					{% endif %}
 				{% endif %}
+
 
 				<tr class="{{status}}">
 
@@ -115,9 +135,14 @@
 						{% endif %}
 					</td>
 
-					{% if not student and own %}
-						<td>{{exercise.average_rate}}</td>
-						<td>{{exercise.attempts}}</td>
+
+					{% if own %}
+						{% if student %}
+							<td>{{note}}</td>
+						{% else %}
+							<td>{{exercise.average_rate}}</td>
+							<td>{{exercise.attempts}}</td>
+						{% endif %}
 					{% endif %}
 				</tr>
 
