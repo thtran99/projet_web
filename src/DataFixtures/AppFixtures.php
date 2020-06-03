@@ -70,7 +70,8 @@ class AppFixtures extends Fixture
                 $exercise->addNotation($notation);
                 $manager->persist($notation);
 
-                for ($k = 0; $k < $rand = mt_rand(4, 8); $k++) {
+                $rand = mt_rand(4, 8);
+                for ($k = 0; $k < $rand; $k++) {
                     $line = new Line();
                     $line
                         ->setRanking($k)
